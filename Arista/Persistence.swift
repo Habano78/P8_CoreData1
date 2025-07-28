@@ -41,11 +41,11 @@ struct PersistenceController {
                 })
                 container.viewContext.automaticallyMergesChangesFromParent = true
                 
-                // **** 1. ON APPELLE NOTRE FONCTION ICI, APRÈS LE CHARGEMENT ****
+                // APPELLE de la FONCTION ICI, APRÈS LE CHARGEMENT
                 prepopulateDatabaseIfNeeded()
         }
         
-        // **** 2. ON AJOUTE NOTRE FONCTION COMPLÈTE ICI ****
+        // AJOUT de la FONCTION COMPLÈTE
         private func prepopulateDatabaseIfNeeded() {
                 // Étape 1 : Vérifier si l'action a déjà été faite
                 let defaults = UserDefaults.standard

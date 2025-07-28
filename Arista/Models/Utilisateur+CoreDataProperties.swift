@@ -48,10 +48,10 @@ extension Utilisateur {
 extension Utilisateur {
         
         @objc(addSeancesExcerciceObject:)
-        @NSManaged public func addToSeancesExcercice(_ value: SeanceExercice)
+        @NSManaged public func addToSeancesExcercice(_ value: SeancesExercice)
         
         @objc(removeSeancesExcerciceObject:)
-        @NSManaged public func removeFromSeancesExcercice(_ value: SeanceExercice)
+        @NSManaged public func removeFromSeancesExcercice(_ value: SeancesExercice)
         
         @objc(addSeancesExcercice:)
         @NSManaged public func addToSeancesExcercice(_ values: NSSet)
