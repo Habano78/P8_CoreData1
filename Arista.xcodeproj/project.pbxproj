@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		225FD5BC2E33C35400F71F1F /* EnregistrementSommeil+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5B62E33C35400F71F1F /* EnregistrementSommeil+CoreDataClass.swift */; };
+		225FD5BD2E33C35400F71F1F /* EnregistrementSommeil+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5B72E33C35400F71F1F /* EnregistrementSommeil+CoreDataProperties.swift */; };
+		225FD5BE2E33C35400F71F1F /* SeancesExercice+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5B82E33C35400F71F1F /* SeancesExercice+CoreDataClass.swift */; };
+		225FD5BF2E33C35400F71F1F /* SeancesExercice+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5B92E33C35400F71F1F /* SeancesExercice+CoreDataProperties.swift */; };
+		225FD5C02E33C35400F71F1F /* Utilisateur+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5BA2E33C35400F71F1F /* Utilisateur+CoreDataClass.swift */; };
+		225FD5C12E33C35400F71F1F /* Utilisateur+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225FD5BB2E33C35400F71F1F /* Utilisateur+CoreDataProperties.swift */; };
 		53E587312B235E8F00E4EF99 /* AristaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E587302B235E8F00E4EF99 /* AristaApp.swift */; };
 		53E587352B235E9000E4EF99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E587342B235E9000E4EF99 /* Assets.xcassets */; };
 		53E587382B235E9000E4EF99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E587372B235E9000E4EF99 /* Preview Assets.xcassets */; };
@@ -43,6 +49,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		225FD5B62E33C35400F71F1F /* EnregistrementSommeil+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnregistrementSommeil+CoreDataClass.swift"; sourceTree = "<group>"; };
+		225FD5B72E33C35400F71F1F /* EnregistrementSommeil+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnregistrementSommeil+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		225FD5B82E33C35400F71F1F /* SeancesExercice+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeancesExercice+CoreDataClass.swift"; sourceTree = "<group>"; };
+		225FD5B92E33C35400F71F1F /* SeancesExercice+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeancesExercice+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		225FD5BA2E33C35400F71F1F /* Utilisateur+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Utilisateur+CoreDataClass.swift"; sourceTree = "<group>"; };
+		225FD5BB2E33C35400F71F1F /* Utilisateur+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Utilisateur+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		53E5872D2B235E8F00E4EF99 /* Arista.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Arista.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E587302B235E8F00E4EF99 /* AristaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AristaApp.swift; sourceTree = "<group>"; };
 		53E587342B235E9000E4EF99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,6 +101,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		225FD5C22E33C3D300F71F1F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				225FD5B62E33C35400F71F1F /* EnregistrementSommeil+CoreDataClass.swift */,
+				225FD5B72E33C35400F71F1F /* EnregistrementSommeil+CoreDataProperties.swift */,
+				225FD5B82E33C35400F71F1F /* SeancesExercice+CoreDataClass.swift */,
+				225FD5B92E33C35400F71F1F /* SeancesExercice+CoreDataProperties.swift */,
+				225FD5BA2E33C35400F71F1F /* Utilisateur+CoreDataClass.swift */,
+				225FD5BB2E33C35400F71F1F /* Utilisateur+CoreDataProperties.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		53E587242B235E8F00E4EF99 = {
 			isa = PBXGroup;
 			children = (
@@ -112,9 +137,9 @@
 		53E5872F2B235E8F00E4EF99 /* Arista */ = {
 			isa = PBXGroup;
 			children = (
+				225FD5C22E33C3D300F71F1F /* Models */,
 				53E587612B235FDC00E4EF99 /* ViewModels */,
 				53E587602B235FD700E4EF99 /* Views */,
-				53E5875F2B235FD200E4EF99 /* Models */,
 				53E587302B235E8F00E4EF99 /* AristaApp.swift */,
 				53E587342B235E9000E4EF99 /* Assets.xcassets */,
 				53E587392B235E9000E4EF99 /* Persistence.swift */,
@@ -147,13 +172,6 @@
 				53E587522B235E9000E4EF99 /* AristaUITestsLaunchTests.swift */,
 			);
 			path = AristaUITests;
-			sourceTree = "<group>";
-		};
-		53E5875F2B235FD200E4EF99 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		53E587602B235FD700E4EF99 /* Views */ = {
@@ -314,6 +332,12 @@
 				53E587672B23600C00E4EF99 /* SleepHistoryView.swift in Sources */,
 				53E587312B235E8F00E4EF99 /* AristaApp.swift in Sources */,
 				53E587652B23600400E4EF99 /* ExerciseListView.swift in Sources */,
+				225FD5BC2E33C35400F71F1F /* EnregistrementSommeil+CoreDataClass.swift in Sources */,
+				225FD5BD2E33C35400F71F1F /* EnregistrementSommeil+CoreDataProperties.swift in Sources */,
+				225FD5BE2E33C35400F71F1F /* SeancesExercice+CoreDataClass.swift in Sources */,
+				225FD5BF2E33C35400F71F1F /* SeancesExercice+CoreDataProperties.swift in Sources */,
+				225FD5C02E33C35400F71F1F /* Utilisateur+CoreDataClass.swift in Sources */,
+				225FD5C12E33C35400F71F1F /* Utilisateur+CoreDataProperties.swift in Sources */,
 				53E5876B2B23648500E4EF99 /* ExerciseListViewModel.swift in Sources */,
 				53E5873D2B235E9000E4EF99 /* Arista.xcdatamodeld in Sources */,
 				53E5876D2B236D9E00E4EF99 /* AddExerciseView.swift in Sources */,

@@ -9,33 +9,28 @@ import Foundation
 import CoreData
 
 class SleepHistoryViewModel: ObservableObject {
-    @Published var sleepSessions = [FakeSleepSession]()
-    
-    private var viewContext: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
-        fetchSleepSessions()
-    }
-    
-    private func fetchSleepSessions() {
+        // 1. On change le type du tableau pour qu'il contienne nos vrais objets CoreData
+        @Published var sleepSessions = [EnregistrementSommeil]()
         
-        sleepSessions = [FakeSleepSession(), 
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession(),
-                         FakeSleepSession()]
-    }
-}
-
-struct FakeSleepSession: Identifiable {
-    var id = UUID()
-    var startDate: Date = Date()
-    var duration: Int = 695
-    var quality: Int = (0...10).randomElement()!
+        private var viewContext: NSManagedObjectContext
+        
+        init(context: NSManagedObjectContext) {
+                self.viewContext = context
+                fetchSleepSessions()
+        }
+        
+        private func fetchSleepSessions() {
+                // 2. On crée une requête de recherche pour les enregistrements de sommeil
+                let fetchRequest: NSFetchRequest<EnregistrementSommeil> = EnregistrementSommeil.fetchRequest()
+                
+                // 3. On ajoute un tri pour afficher les plus récents en premier
+                fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \EnregistrementSommeil.date, ascending: false)]
+                
+                do {
+                        // 4. On exécute la requête et on met à jour notre tableau
+                        sleepSessions = try viewContext.fetch(fetchRequest)
+                } catch {
+                        print("Failed to fetch sleep sessions: \(error)")
+                }
+        }
 }

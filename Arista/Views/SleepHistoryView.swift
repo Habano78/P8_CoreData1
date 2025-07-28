@@ -8,51 +8,44 @@
 import SwiftUI
 
 struct SleepHistoryView: View {
-    @ObservedObject var viewModel: SleepHistoryViewModel
-
+        @ObservedObject var viewModel: SleepHistoryViewModel
+        
         var body: some View {
-            List(viewModel.sleepSessions) { session in
-                HStack {
-                    QualityIndicator(quality: session.quality)
-                        .padding()
-                    VStack(alignment: .leading) {
-                        Text("Début : \(session.startDate.formatted())")
-                        Text("Durée : \(session.duration/60) heures")
-                    }
+                // Utilisation de NavigationStack comme bonne pratique
+                NavigationStack {
+                        List(viewModel.sleepSessions) { session in
+                                HStack {
+                                        Image(systemName: "moon.zzz.fill")
+                                                .foregroundColor(.blue)
+                                                .font(.title)
+                                                .padding()
+                                        VStack(alignment: .leading) {
+                                                // Utilise les nouvelles propriétés de notre objet CoreData
+                                                Text("Début : \(session.heureDebut ?? Date(), formatter: itemFormatter)")
+                                                Text("Fin : \(session.heureFin ?? Date(), formatter: itemFormatter)")
+                                                
+                                                // Calcule et affiche la durée
+                                                if let start = session.heureDebut, let end = session.heureFin {
+                                                        let durationInHours = (end.timeIntervalSince(start) / 3600)
+                                                        Text(String(format: "Durée : %.1f heures", durationInHours))
+                                                }
+                                        }
+                                }
+                        }
+                        .navigationTitle("Historique de Sommeil")
                 }
-            }
-            .navigationTitle("Historique de Sommeil")
         }
 }
 
-struct QualityIndicator: View {
-    let quality: Int
+// Ajout d'un DateFormatter to ensure the dates and times are displayed in a clean, human-readable format.
+private let itemFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
+        return formatter
+}()
 
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(qualityColor(quality), lineWidth: 5)
-                .foregroundColor(qualityColor(quality))
-                .frame(width: 30, height: 30)
-            Text("\(quality)")
-                .foregroundColor(qualityColor(quality))
-        }
-    }
-
-    func qualityColor(_ quality: Int) -> Color {
-        switch (10-quality) {
-        case 0...3:
-            return .green
-        case 4...6:
-            return .yellow
-        case 7...10:
-            return .red
-        default:
-            return .gray
-        }
-    }
-}
 
 #Preview {
-    SleepHistoryView(viewModel: SleepHistoryViewModel(context: PersistenceController.preview.container.viewContext))
+        SleepHistoryView(viewModel: SleepHistoryViewModel(context: PersistenceController.preview.container.viewContext))
 }
