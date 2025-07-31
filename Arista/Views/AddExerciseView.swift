@@ -8,32 +8,53 @@
 import SwiftUI
 
 struct AddExerciseView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: AddExerciseViewModel
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                Form {
-                    TextField("Catégorie", text: $viewModel.category)
-                    TextField("Heure de démarrage", text: $viewModel.startTime)
-                    TextField("Durée (en minutes)", text: $viewModel.duration)
-                    TextField("Intensité (0 à 10)", text: $viewModel.intensity)
-                }.formStyle(.grouped)
-                Spacer()
-                Button("Ajouter l'exercice") {
-                    if viewModel.addExercise() {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }.buttonStyle(.borderedProminent)
-                    
-            }
-            .navigationTitle("Nouvel Exercice ...")
-            
+        
+        @Environment(\.dismiss) var dismiss
+        
+        // Le ViewModel qui contient la logique
+        @ObservedObject var viewModel: AddExerciseViewModel
+        
+        var body: some View {
+                NavigationStack {
+                        // Un formulaire pour une présentation propre
+                        Form {
+                                // Menu déroulant pour le type d'exercice
+                                Picker("Catégorie", selection: $viewModel.type) {
+                                        ForEach(viewModel.types, id: \.self) { type in
+                                                Text(type)
+                                        }
+                                }
+                                
+                                // Sélecteur de date et d'heure
+                                DatePicker("Date", selection: $viewModel.date)
+                                
+                                // Stepper pour ajuster la durée
+                                Stepper("Durée : \(viewModel.duration) minutes", value: $viewModel.duration, in: 5...240, step: 5)
+                                
+                                // Slider pour choisir l'intensité
+                                VStack(alignment: .leading) {
+                                        Text("Intensité : \(Int(viewModel.intensity))")
+                                        Slider(value: $viewModel.intensity, in: 0...10, step: 1)
+                                }
+                        }
+                        .navigationTitle("Nouvel Exercice")
+                        // Boutons dans la barre de navigation pour annuler ou sauvegarder
+                        .navigationBarItems(
+                                leading: Button("Annuler") {
+                                        dismiss()
+                                },
+                                trailing: Button("Sauvegarder") {
+                                        if viewModel.addExercise() {
+                                                dismiss() // Ferme la vue si la sauvegarde réussit
+                                        }
+                                }
+                        )
+                }
         }
-    }
 }
 
+// MARK: - Prévisualisation
+
 #Preview {
-    AddExerciseView(viewModel: AddExerciseViewModel(context: PersistenceController.preview.container.viewContext))
+        AddExerciseView(viewModel: AddExerciseViewModel(context: PersistenceController.preview.container.viewContext))
 }

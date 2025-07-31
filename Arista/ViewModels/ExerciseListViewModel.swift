@@ -6,30 +6,43 @@
 //
 
 import Foundation
-
 import CoreData
 
 class ExerciseListViewModel: ObservableObject {
-    @Published var exercises = [FakeExercise]()
-
-    var viewContext: NSManagedObjectContext
-
-    init(context: NSManagedObjectContext) {
-        self.viewContext = context
-        fetchExercises()
-    }
-
-    private func fetchExercises() {
-        // TODO: fetch data in CoreData and replace dumb value below with appropriate information
-        exercises = [FakeExercise(), FakeExercise(), FakeExercise()]
-    }
-}
-
-struct FakeExercise: Identifiable {
-    var id = UUID()
-    
-    var category: String = "Football"
-    var duration: Int = 120
-    var intensity: Int = 8
-    var date: Date = Date()
+        /// Publie la liste des exercices à la vue.
+        @Published var exercises = [Exercise]()
+        
+        /// contexte CoreData, nécessaire pour passer à la vue d'ajout.
+        var viewContext: NSManagedObjectContext
+        
+        /// repository qui gère les opérations sur les exercices.
+        private let exerciseRepository: ExerciseRepository
+        
+        // MARK: - Init
+        init(context: NSManagedObjectContext) {
+                self.viewContext = context
+                self.exerciseRepository = ExerciseRepository(viewContext: context)
+                fetchExercises()
+        }
+        // MARK: - Methods
+        
+        /// Récupère la liste des exercices depuis le repository.
+        func fetchExercises() {
+                do {
+                        exercises = try exerciseRepository.getExercises()
+                } catch {
+                        print("Failed to fetch exercises: \(error)")
+                }
+        }
+        
+        /// Demande au repository de supprimer un exercice.
+        func deleteExercise(exercise: Exercise) {
+                do {
+                        try exerciseRepository.deleteExercise(exercise: exercise)
+                        // Après la suppression, on rafraîchit la liste
+                        fetchExercises()
+                } catch {
+                        print("Failed to delete exercise: \(error)")
+                }
+        }
 }

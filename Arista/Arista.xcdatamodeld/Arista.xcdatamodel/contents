@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24E263" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="EnregistrementSommeil" representedClassName=".EnregistrementSommeil" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="heureDebut" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="heureFin" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="utilisateur_sommeil" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Utilisateur" inverseName="enregistrementsSommeil" inverseEntity="Utilisateur"/>
+    <entity name="Exercice" representedClassName="Exercise" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="intensity" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="exercices" inverseEntity="User"/>
     </entity>
-    <entity name="SeancesExercice" representedClassName="SeancesExercice" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="dureeEnMinutes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="intensite" optional="YES" attributeType="String"/>
-        <attribute name="typeExercice" optional="YES" attributeType="String"/>
-        <relationship name="utilisateur_exercice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Utilisateur" inverseName="seancesExcercice" inverseEntity="Utilisateur"/>
+    <entity name="Sleep" representedClassName=".Sleep" syncable="YES">
+        <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quality" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="sleeps" inverseEntity="User"/>
     </entity>
-    <entity name="Utilisateur" representedClassName=".Utilisateur" syncable="YES">
-        <attribute name="dateDeNaissance" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="nom" optional="YES" attributeType="String"/>
-        <attribute name="poids" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="prenom" optional="YES" attributeType="String"/>
-        <attribute name="taille" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="enregistrementsSommeil" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EnregistrementSommeil" inverseName="utilisateur_sommeil" inverseEntity="EnregistrementSommeil"/>
-        <relationship name="seancesExcercice" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SeancesExercice" inverseName="utilisateur_exercice" inverseEntity="SeancesExercice"/>
+    <entity name="User" representedClassName=".User" syncable="YES">
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <relationship name="exercices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Exercice" inverseName="user" inverseEntity="Exercice"/>
+        <relationship name="sleeps" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Sleep" inverseName="user" inverseEntity="Sleep"/>
     </entity>
 </model>
