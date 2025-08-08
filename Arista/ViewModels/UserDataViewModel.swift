@@ -22,20 +22,23 @@ class UserDataViewModel: ObservableObject {
         }
         
         private func fetchUserData() {
-                
                 do {
-                        // demande au repo de nous donner le user
+                        // 1. On appelle bien le Repository, comme vous l'avez dit
                         guard let user = try userRepository.getUser() else {
-                                // si aucun user n'est trouvé, on gère l'erreur
-                                print("User not found. The database might not be prepopulated.")
+                                print("User not found from repository.")
                                 return
                         }
-                        // On met à jour nos propriétés avec les données reçues
-                                    firstName = user.firstName ?? ""
-                                    lastName = user.lastName ?? ""
+                        
+                        // 2. On s'assure que la mise à jour se fait sur le thread principal
+                        DispatchQueue.main.async {
+                                self.firstName = user.firstName ?? ""
+                                self.lastName = user.lastName ?? ""
+                        }
                 } catch {
-                        // On gère l'erreur ici
-                        print("Failed to fetch user: \(error)")
+                        print("Failed to fetch user via repository: \(error)")
                 }
         }
 }
+
+
+
