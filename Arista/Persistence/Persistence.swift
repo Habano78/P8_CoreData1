@@ -46,21 +46,21 @@ struct PersistenceController {
         }
         
         private func prepopulateDatabaseIfNeeded() {
-                // Étape 1 : Vérifier si l'action a déjà été faite
+                //  1 : Vérifier si l'action a déjà été faite
                 let defaults = UserDefaults.standard
                 let hasLaunchedBefore = defaults.bool(forKey: "hasLaunchedBefore")
                 
                 guard !hasLaunchedBefore else { return }
                 
-                // Étape 2 : Obtenir le contexte
+                //  2 : Obtenir le contexte
                 let context = container.viewContext
                 
-                // Étape 3 : Créer l'objet User avec les bons attributs
+                //  3 : Créer l'objet User avec les bons attributs
                 let newUser = User(context: context)
                 newUser.lastName = "Perez"
                 newUser.firstName = "Gabriel"
                
-                // Étape 4 : Créer des enregistrements de sommeil avec les bons attributs
+                //  4 : Créer des enregistrements de sommeil avec les bons attributs
                 let sleepRecord1 = Sleep(context: context)
                 sleepRecord1.startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) // Hier
                 sleepRecord1.duration = Int64((360...540).randomElement()!) // Durée en minutes (ex: 6 à 9h)
@@ -71,12 +71,11 @@ struct PersistenceController {
                 sleepRecord2.duration = Int64((360...540).randomElement()!)
                 sleepRecord2.quality = Int64((5...10).randomElement()!)
                 
-                // Étape 5 : Lier les enregistrements de sommeil à l'utilisateur
-                // Assurez-vous que la relation dans votre .xcdatamodeld s'appelle bien "sleeps"
+                //  5 : Lier les enregistrements de sommeil à l'utilisateur
                 newUser.addToSleeps(sleepRecord1)
                 newUser.addToSleeps(sleepRecord2)
                 
-                // Étape 6 : Sauvegarder le contexte
+                //  6 : Sauvegarder le contexte
                 do {
                         try context.save()
                         defaults.set(true, forKey: "hasLaunchedBefore")

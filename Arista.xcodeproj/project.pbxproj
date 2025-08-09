@@ -109,6 +109,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2218666D2E47239E00C8C87D /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				53E587392B235E9000E4EF99 /* Persistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		225FD5C22E33C3D300F71F1F /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,8 +168,8 @@
 				225FD5C22E33C3D300F71F1F /* Models */,
 				53E587612B235FDC00E4EF99 /* ViewModels */,
 				53E587602B235FD700E4EF99 /* Views */,
+				2218666D2E47239E00C8C87D /* Persistence */,
 				53E587342B235E9000E4EF99 /* Assets.xcassets */,
-				53E587392B235E9000E4EF99 /* Persistence.swift */,
 				53E5873B2B235E9000E4EF99 /* Arista.xcdatamodeld */,
 				53E587362B235E9000E4EF99 /* Preview Content */,
 			);

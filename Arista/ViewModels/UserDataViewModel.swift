@@ -9,13 +9,14 @@ import Foundation
 import CoreData
 
 class UserDataViewModel: ObservableObject {
+        
+        //MARK: Propriétés
         @Published var firstName: String = ""
         @Published var lastName: String = ""
         
-        //Dépendance au UserRepo
         private let userRepository: UserRepository
         
-        // instantiation de UserRepo
+        //MARK: Init (instantiation de UserRepo)
         init(context: NSManagedObjectContext) {
                 self.userRepository = UserRepository (viewContext: context)
                 fetchUserData()
