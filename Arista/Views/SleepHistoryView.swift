@@ -7,25 +7,40 @@
 import SwiftUI
 
 struct SleepHistoryView: View {
+        //MARK: Propriétés
         @ObservedObject var viewModel: SleepHistoryViewModel
         
+        //MARK: Body
         var body: some View {
                 NavigationStack {
                         List(viewModel.sleepSessions) { session in
                                 HStack {
+                                        // Affiche l'indicateur de qualité du sommeil.
                                         QualityIndicator(quality: Int(session.quality))
                                                 .padding()
+                                        
                                         VStack(alignment: .leading) {
+                                                // On utilise les noms d'attributs en anglais du modèle.
                                                 Text("Début : \(session.startDate?.formatted() ?? "Date inconnue")")
                                                 Text("Durée : \(session.duration / 60) heures")
                                         }
                                 }
                         }
                         .navigationTitle("Historique de Sommeil")
+                        // Ce modificateur est appelé lorsque la vue apparaît à l'écran.
+                        .onAppear {
+                                // On crée une "Task" pour exécuter du code asynchrone.
+                                Task {
+                                        // On attend que la fonction asynchrone du ViewModel soit terminée.
+                                        await viewModel.fetchSleepSessions()
+                                }
+                        }
                 }
         }
 }
 
+// MARK: Vue auxiliaire
+/// Un cercle de couleur pour afficher la qualité du sommeil.
 struct QualityIndicator: View {
         let quality: Int
         
@@ -33,28 +48,21 @@ struct QualityIndicator: View {
                 ZStack {
                         Circle()
                                 .stroke(qualityColor(quality), lineWidth: 5)
-                                .foregroundColor(qualityColor(quality))
                                 .frame(width: 30, height: 30)
                         Text("\(quality)")
                                 .foregroundColor(qualityColor(quality))
                 }
         }
         
-        func qualityColor(_ quality: Int) -> Color {
-                switch (10 - quality) {
-                case 0...3:
+        /// Retourne une couleur en fonction de la note de qualité.
+        private func qualityColor(_ quality: Int) -> Color {
+                switch quality {
+                case 8...10:
                         return .green
-                case 4...6:
+                case 4...7:
                         return .yellow
-                case 7...10:
-                        return .red
                 default:
-                        return .gray
+                        return .red
                 }
         }
-}
-
-
-#Preview {
-        SleepHistoryView(viewModel: SleepHistoryViewModel(context: PersistenceController.preview.container.viewContext))
 }

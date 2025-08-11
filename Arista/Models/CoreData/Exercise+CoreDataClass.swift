@@ -2,7 +2,7 @@
 //  Exercise+CoreDataClass.swift
 //  Arista
 //
-//  Created by Perez William on 29/07/2025.
+//  Created by Perez William on 11/08/2025.
 //
 //
 

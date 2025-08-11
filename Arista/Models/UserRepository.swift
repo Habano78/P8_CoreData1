@@ -8,22 +8,21 @@ import Foundation
 import CoreData
 
 struct UserRepository {
-        
+        //MARK: Propriété
         let viewContext: NSManagedObjectContext
         
-        // L'initialiseur permet de recevoir le contexte depuis l'extérieur
+        //MARK: Init
         init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
                 self.viewContext = viewContext
         }
-        
-        func getUser() throws -> User? {
-                // Crée une requête pour chercher des objets de type "User"
+        //MARK: Action
+        func getUser() async throws -> User? {
+                /// Crée une requête pour chercher des objets de type "User"
                 let request: NSFetchRequest<User> = User.fetchRequest()
-                
-                // On indique qu'on ne veut qu'un seul résultat au maximum
                 request.fetchLimit = 1
-                
-                // Exécute la requête et retourne le premier résultat trouvé
-                return try viewContext.fetch(request).first
+                /// Exécute la requête de manière asynchrone
+                return try await viewContext.perform {
+                        try self.viewContext.fetch(request).first
+                }
         }
 }

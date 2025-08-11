@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  Arista
 //
-//  Created by Perez William on 29/07/2025.
+//  Created by Perez William on 11/08/2025.
 //
 //
 
@@ -16,10 +16,27 @@ extension User {
         return NSFetchRequest<User>(entityName: "User")
     }
 
-    @NSManaged public var lastName: String?
     @NSManaged public var firstName: String?
+    @NSManaged public var lastName: String?
+    @NSManaged public var exercises: NSSet?
     @NSManaged public var sleeps: NSSet?
-    @NSManaged public var exercices: NSSet?
+
+}
+
+// MARK: Generated accessors for exercises
+extension User {
+
+    @objc(addExercisesObject:)
+    @NSManaged public func addToExercises(_ value: Exercise)
+
+    @objc(removeExercisesObject:)
+    @NSManaged public func removeFromExercises(_ value: Exercise)
+
+    @objc(addExercises:)
+    @NSManaged public func addToExercises(_ values: NSSet)
+
+    @objc(removeExercises:)
+    @NSManaged public func removeFromExercises(_ values: NSSet)
 
 }
 
@@ -37,23 +54,6 @@ extension User {
 
     @objc(removeSleeps:)
     @NSManaged public func removeFromSleeps(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for exercices
-extension User {
-
-    @objc(addExercicesObject:)
-    @NSManaged public func addToExercices(_ value: Exercise)
-
-    @objc(removeExercicesObject:)
-    @NSManaged public func removeFromExercices(_ value: Exercise)
-
-    @objc(addExercices:)
-    @NSManaged public func addToExercices(_ values: NSSet)
-
-    @objc(removeExercices:)
-    @NSManaged public func removeFromExercices(_ values: NSSet)
 
 }
 

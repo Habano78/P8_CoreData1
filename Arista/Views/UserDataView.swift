@@ -24,6 +24,14 @@ struct UserDataView: View {
                         Spacer()
                 }
                 .edgesIgnoringSafeArea(.all)
+                // Ce modificateur est appelé une seule fois, lorsque la vue apparaît à l'écran.
+                .onAppear {
+                        // On crée une "Task" pour exécuter du code asynchrone.
+                        Task {
+                                // On "attend" que la fonction asynchrone du ViewModel soit terminée.
+                                await viewModel.fetchUserData()
+                        }
+                }
         }
 }
 

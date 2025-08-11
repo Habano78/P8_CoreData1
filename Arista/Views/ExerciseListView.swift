@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct ExerciseListView: View {
+        // Le ViewModel contient la logique et les données à afficher
         @ObservedObject var viewModel: ExerciseListViewModel
+        // Une variable d'état pour contrôler l'affichage de la feuille d'ajout
         @State private var showingAddExerciseView = false
         
         var body: some View {
+                // NavigationStack est la manière moderne de gérer la navigation
                 NavigationStack {
                         List {
+                                // La boucle itère sur les vrais objets "Exercise" de CoreData
                                 ForEach(viewModel.exercises) { exercise in
                                         HStack {
                                                 Image(systemName: iconForCategory(exercise.category))
+                                                
                                                 VStack(alignment: .leading) {
+                                                        // On utilise les noms d'attributs en anglais du modèle
                                                         Text(exercise.category ?? "N/A")
                                                                 .font(.headline)
                                                         Text("Durée: \(exercise.duration) min")
@@ -25,31 +31,57 @@ struct ExerciseListView: View {
                                                         Text(exercise.startDate?.formatted() ?? "Date inconnue")
                                                                 .font(.subheadline)
                                                 }
+                                                
                                                 Spacer()
+                                                
+                                                // On passe l'intensité (Int64) à l'indicateur (qui attend un Int)
                                                 IntensityIndicator(intensity: Int(exercise.intensity))
                                         }
                                 }
+                                // Ajoute la fonctionnalité "glisser pour supprimer"
                                 .onDelete(perform: deleteItems)
                         }
                         .navigationTitle("Exercices")
+                        // Barre de navigation avec un bouton "+" pour ajouter un exercice
                         .navigationBarItems(trailing: Button(action: {
                                 showingAddExerciseView = true
                         }) {
                                 Image(systemName: "plus")
                         })
+                        // La "feuille" (sheet) qui apparaît pour ajouter un exercice
                         .sheet(isPresented: $showingAddExerciseView) {
                                 AddExerciseView(viewModel: AddExerciseViewModel(context: viewModel.viewContext))
-                                        .onDisappear(perform: viewModel.fetchExercises)
+                        }
+                        // Charge les données de manière asynchrone quand la vue apparaît
+                        .onAppear {
+                                Task {
+                                        await viewModel.fetchExercises()
+                                }
+                        }
+                        // Rafraîchit la liste quand la vue revient au premier plan
+                        .onChange(of: showingAddExerciseView) {
+                                if !showingAddExerciseView {
+                                        Task {
+                                                await viewModel.fetchExercises()
+                                        }
+                                }
                         }
                 }
         }
         
+        /// Gère la suppression des exercices de manière asynchrone
         private func deleteItems(offsets: IndexSet) {
                 withAnimation {
-                        offsets.map { viewModel.exercises[$0] }.forEach(viewModel.deleteExercise)
+                        Task {
+                                for index in offsets {
+                                        let exerciseToDelete = viewModel.exercises[index]
+                                        await viewModel.deleteExercise(exercise: exerciseToDelete)
+                                }
+                        }
                 }
         }
         
+        /// Traduit le nom de la catégorie en un nom d'icône SF Symbols
         private func iconForCategory(_ category: String?) -> String {
                 switch category {
                 case "Football":
@@ -68,6 +100,9 @@ struct ExerciseListView: View {
         }
 }
 
+// MARK: - Vues auxiliaires
+
+/// Un simple cercle de couleur pour représenter l'intensité
 struct IntensityIndicator: View {
         var intensity: Int
         
@@ -90,6 +125,8 @@ struct IntensityIndicator: View {
                 }
         }
 }
+
+// MARK: - Prévisualisation
 
 #Preview {
         ExerciseListView(viewModel: ExerciseListViewModel(context: PersistenceController.preview.container.viewContext))

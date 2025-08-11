@@ -44,17 +44,15 @@ struct AddExerciseView: View {
                                         dismiss()
                                 },
                                 trailing: Button("Sauvegarder") {
-                                        if viewModel.addExercise() {
-                                                dismiss() // Ferme la vue si la sauvegarde réussit
+                                        ///une Task pour pouvoir utiliser async/await
+                                        Task {
+                                                if await viewModel.addExercise() {
+                                                        /// Si c'est un succès, on ferme la vue
+                                                        dismiss()
+                                                }
                                         }
                                 }
                         )
                 }
         }
-}
-
-// MARK: - Prévisualisation
-
-#Preview {
-        AddExerciseView(viewModel: AddExerciseViewModel(context: PersistenceController.preview.container.viewContext))
 }

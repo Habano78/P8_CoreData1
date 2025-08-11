@@ -27,10 +27,10 @@ class AddExerciseViewModel: ObservableObject {
         
         //MARK: Methodes
         /// Appel au repo pour sauvegarder la saisie de l'utilisateur. Si l'ajout réussit, on retourne true.
-        func addExercise() -> Bool {
+        func addExercise() async -> Bool {
                 do {
                         // On délègue le travail de création au repository.
-                        try exerciseRepository.addExercise(
+                        try await exerciseRepository.addExercise(
                                 category: type,
                                 duration: duration,
                                 intensity: Int(intensity),

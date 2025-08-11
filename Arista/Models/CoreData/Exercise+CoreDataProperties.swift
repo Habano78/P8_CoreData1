@@ -2,7 +2,7 @@
 //  Exercise+CoreDataProperties.swift
 //  Arista
 //
-//  Created by Perez William on 29/07/2025.
+//  Created by Perez William on 11/08/2025.
 //
 //
 
@@ -13,7 +13,7 @@ import CoreData
 extension Exercise {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Exercise> {
-        return NSFetchRequest<Exercise>(entityName: "Exercice")
+        return NSFetchRequest<Exercise>(entityName: "Exercise")
     }
 
     @NSManaged public var startDate: Date?

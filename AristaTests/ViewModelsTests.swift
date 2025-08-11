@@ -16,21 +16,24 @@ struct ViewModelTests {
         }
         
         @Test("Le ViewModel peut récupérer les données de l'utilisateur")
-        func testUserDataViewModel() throws {
+        func testUserDataViewModel() async throws {
                 // Arrange
                 let persistenceController = createInMemoryPersistenceController()
                 let context = persistenceController.container.viewContext
-                // On pré-remplit un faux utilisateur dans notre base de test
+                // pré-remplir un faux utilisateur dans notre base de test
                 let user = User(context: context)
-                user.firstName = "John"
-                user.lastName = "Appleseed"
+                user.firstName = "Gabriel"
+                user.lastName = "Perez"
                 try context.save()
                 
+                // On utilise "await" car l'initialisation d'un @MainActor est asynchrone depuis un contexte de test.
+                let viewModel = await UserDataViewModel(context: context)
+                
                 // Act
-                let viewModel = UserDataViewModel(context: context)
+                await viewModel.fetchUserData()
                 
                 // Assert
-                #expect(viewModel.firstName == "John")
-                #expect(viewModel.lastName == "Appleseed")
+                #expect(await viewModel.firstName == "Gabriel")
+                #expect(await viewModel.lastName == "Perez")
         }
 }
