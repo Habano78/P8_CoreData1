@@ -14,16 +14,15 @@ struct ExerciseListView: View {
         @State private var showingAddExerciseView = false
         
         var body: some View {
-                // NavigationStack est la manière moderne de gérer la navigation
                 NavigationStack {
                         List {
-                                // La boucle itère sur les vrais objets "Exercise" de CoreData
+                                /// La boucle itère sur les vrais objets "Exercise" de CoreData
                                 ForEach(viewModel.exercises) { exercise in
                                         HStack {
                                                 Image(systemName: iconForCategory(exercise.category))
                                                 
                                                 VStack(alignment: .leading) {
-                                                        // On utilise les noms d'attributs en anglais du modèle
+                        
                                                         Text(exercise.category ?? "N/A")
                                                                 .font(.headline)
                                                         Text("Durée: \(exercise.duration) min")
@@ -33,32 +32,30 @@ struct ExerciseListView: View {
                                                 }
                                                 
                                                 Spacer()
-                                                
-                                                // On passe l'intensité (Int64) à l'indicateur (qui attend un Int)
                                                 IntensityIndicator(intensity: Int(exercise.intensity))
                                         }
                                 }
-                                // Ajoute la fonctionnalité "glisser pour supprimer"
+                                /// Ajoute la fonctionnalité "glisserr pour supprimer"
                                 .onDelete(perform: deleteItems)
                         }
                         .navigationTitle("Exercices")
-                        // Barre de navigation avec un bouton "+" pour ajouter un exercice
+                        /// Barre de navigation avec un bouton "+" pour ajouter un exercice
                         .navigationBarItems(trailing: Button(action: {
                                 showingAddExerciseView = true
                         }) {
                                 Image(systemName: "plus")
                         })
-                        // La "feuille" (sheet) qui apparaît pour ajouter un exercice
+                        ///feuille qui apparaît pour ajouter un exercice
                         .sheet(isPresented: $showingAddExerciseView) {
                                 AddExerciseView(viewModel: AddExerciseViewModel(context: viewModel.viewContext))
                         }
-                        // Charge les données de manière asynchrone quand la vue apparaît
+                        /// Charge les données quand la vue apparaît
                         .onAppear {
                                 Task {
                                         await viewModel.fetchExercises()
                                 }
                         }
-                        // Rafraîchit la liste quand la vue revient au premier plan
+                        /// Rafraîchit la liste quand la vue revient au premier plan
                         .onChange(of: showingAddExerciseView) {
                                 if !showingAddExerciseView {
                                         Task {
@@ -124,10 +121,4 @@ struct IntensityIndicator: View {
                         return .gray
                 }
         }
-}
-
-// MARK: - Prévisualisation
-
-#Preview {
-        ExerciseListView(viewModel: ExerciseListViewModel(context: PersistenceController.preview.container.viewContext))
 }

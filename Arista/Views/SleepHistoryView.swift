@@ -15,23 +15,19 @@ struct SleepHistoryView: View {
                 NavigationStack {
                         List(viewModel.sleepSessions) { session in
                                 HStack {
-                                        // Affiche l'indicateur de qualité du sommeil.
+                                        /// Affiche l'indicateur de qualité du sommeil.
                                         QualityIndicator(quality: Int(session.quality))
                                                 .padding()
                                         
                                         VStack(alignment: .leading) {
-                                                // On utilise les noms d'attributs en anglais du modèle.
                                                 Text("Début : \(session.startDate?.formatted() ?? "Date inconnue")")
                                                 Text("Durée : \(session.duration / 60) heures")
                                         }
                                 }
                         }
                         .navigationTitle("Historique de Sommeil")
-                        // Ce modificateur est appelé lorsque la vue apparaît à l'écran.
                         .onAppear {
-                                // On crée une "Task" pour exécuter du code asynchrone.
                                 Task {
-                                        // On attend que la fonction asynchrone du ViewModel soit terminée.
                                         await viewModel.fetchSleepSessions()
                                 }
                         }

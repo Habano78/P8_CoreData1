@@ -17,20 +17,19 @@ class UserDataViewModel: ObservableObject {
         
         private let userRepository: UserRepository
         
-        //MARK: Init (instantiation de UserRepo)
+        //MARK: Init
         init(context: NSManagedObjectContext) {
                 self.userRepository = UserRepository (viewContext: context)
         }
         
         func fetchUserData() async {
                 do {
-                        // 1. On appelle bien le Repository, comme vous l'avez dit
+                        // On appelle bien le Repository
                         guard let user = try await userRepository.getUser() else {
                                 print("User not found from repository.")
                                 return
                         }
-                        
-                        // La mise à jour est sécurisée grâce à @MainActor
+                        /// mise à jour sécurisée grâce à @MainActor
                         self.firstName = user.firstName ?? ""
                         self.lastName = user.lastName ?? ""
                 } catch {
