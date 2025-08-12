@@ -7,20 +7,20 @@
 import Foundation
 import CoreData
 
-struct UserRepository {
-        //MARK: Propriété
+//MARK: Contrat
+struct UserRepository: UserRepositoryProtocol {
+        
         let viewContext: NSManagedObjectContext
         
-        //MARK: Init
         init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
                 self.viewContext = viewContext
         }
-        //MARK: Action
+        
+        //MARK: Methode (récupère in async l'unique utilisateur)
         func getUser() async throws -> User? {
-                /// Crée une requête pour chercher des objets de type User
                 let request: NSFetchRequest<User> = User.fetchRequest()
                 request.fetchLimit = 1
-                /// Exécute la requête de manière asynchrone
+                
                 return try await viewContext.perform {
                         try self.viewContext.fetch(request).first
                 }

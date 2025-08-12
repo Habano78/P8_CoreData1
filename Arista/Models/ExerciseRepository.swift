@@ -4,42 +4,33 @@
 //
 //  Created by Perez William on 29/07/2025.
 //
-
 import Foundation
 import CoreData
+import SwiftUI
 
-struct ExerciseRepository {
-        //MARK: Propriété
+//MARK: Contrat
+struct ExerciseRepository: ExerciseRepositoryProtocol {
+        
         let viewContext: NSManagedObjectContext
         
-        //MARK: Init
-        init(
-                viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
-        ) {
+        init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
                 self.viewContext = viewContext
         }
         
-        //MARK: Actions
-        
-        //Recuperer la liste de tous les exercices
+        /// Récupère tous les exercices
         func getExercises() async throws -> [Exercise] {
                 let request: NSFetchRequest<Exercise> = Exercise.fetchRequest()
-                request.sortDescriptors = [NSSortDescriptor(
-                        keyPath: \Exercise.startDate,
-                        ascending: false
-                )]
+                request.sortDescriptors = [NSSortDescriptor(keyPath: \Exercise.startDate, ascending: false)]
                 return try await viewContext.perform {
                         try self.viewContext.fetch(request)
                 }
         }
         
-        //Ajouter des exercices
+        /// Ajoute un exercice de manière asynchrone.
         func addExercise(category: String, duration: Int, intensity: Int, startDate: Date) async throws {
                 let newExercise = Exercise(context: viewContext)
                 newExercise.category = category
-                newExercise.duration = Int64(
-                        duration
-                )
+                newExercise.duration = Int64(duration)
                 newExercise.intensity = Int64(intensity)
                 newExercise.startDate = startDate
                 
@@ -48,10 +39,11 @@ struct ExerciseRepository {
                 }
         }
         
-        // Supprimer un exercice spécifique.
+        /// Supprime un exercice de manière asynchrone.
         func deleteExercise(exercise: Exercise) async throws {
-                viewContext.delete(exercise)
-                
+                await viewContext.perform {
+                        self.viewContext.delete(exercise)
+                }
                 try await viewContext.perform {
                         try self.viewContext.save()
                 }
