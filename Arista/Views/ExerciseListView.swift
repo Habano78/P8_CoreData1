@@ -22,7 +22,7 @@ struct ExerciseListView: View {
                                                 Image(systemName: iconForCategory(exercise.category))
                                                 
                                                 VStack(alignment: .leading) {
-                        
+                                                        
                                                         Text(exercise.category ?? "N/A")
                                                                 .font(.headline)
                                                         Text("Durée: \(exercise.duration) min")
@@ -66,16 +66,9 @@ struct ExerciseListView: View {
                 }
         }
         
-        /// Gère la suppression des exercices de manière asynchrone
+        /// Gère la suppression des exercices
         private func deleteItems(offsets: IndexSet) {
-                withAnimation {
-                        Task {
-                                for index in offsets {
-                                        let exerciseToDelete = viewModel.exercises[index]
-                                        await viewModel.deleteExercise(exercise: exerciseToDelete)
-                                }
-                        }
-                }
+                viewModel.delete(at: offsets)
         }
         
         /// Traduit le nom de la catégorie en un nom d'icône SF Symbols

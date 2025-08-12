@@ -24,7 +24,7 @@ class UserDataViewModel: ObservableObject {
         
         func fetchUserData() async {
                 do {
-                        // On appelle bien le Repository
+                        /// On appelle bien le Repository
                         guard let user = try await userRepository.getUser() else {
                                 print("User not found from repository.")
                                 return

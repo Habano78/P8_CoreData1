@@ -17,7 +17,7 @@ struct UserRepository {
         }
         //MARK: Action
         func getUser() async throws -> User? {
-                /// Crée une requête pour chercher des objets de type "User"
+                /// Crée une requête pour chercher des objets de type User
                 let request: NSFetchRequest<User> = User.fetchRequest()
                 request.fetchLimit = 1
                 /// Exécute la requête de manière asynchrone

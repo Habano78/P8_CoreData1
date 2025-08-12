@@ -6,6 +6,7 @@
 //
 import Foundation
 import CoreData
+import SwiftUI
 
 @MainActor
 class ExerciseListViewModel: ObservableObject {
@@ -33,13 +34,28 @@ class ExerciseListViewModel: ObservableObject {
         }
         
         /// Demande au repository de supprimer un exercice de manière asynchrone.
-        func deleteExercise(exercise: Exercise) async {
-                do {
-                        try await exerciseRepository.deleteExercise(exercise: exercise)
-                        /// Après la suppression, on rafraîchit la liste pour mettre à jour l'UI.
-                        await fetchExercises()
-                } catch {
-                        print("Failed to delete exercise: \(error)")
+        // Dans ExerciseListViewModel.swift
+        
+        func delete(at offsets: IndexSet) {
+                // 1. On identifie les objets à supprimer
+                let exercisesToDelete = offsets.map { self.exercises[$0] }
+                
+                // 2. On lance l'animation en supprimant les objets de la liste publiée
+                withAnimation {
+                        exercises.remove(atOffsets: offsets)
+                }
+                
+                // 3. On lance une tâche de fond pour supprimer définitivement de CoreData
+                Task {
+                        for exercise in exercisesToDelete {
+                                do {
+                                        try await exerciseRepository.deleteExercise(exercise: exercise)
+                                } catch {
+                                        print("Failed to delete exercise from repository: \(error)")
+                                        // En cas d'échec, on pourrait recharger les données pour garder la cohérence
+                                        await fetchExercises()
+                                }
+                        }
                 }
         }
 }
