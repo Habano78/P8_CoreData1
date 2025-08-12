@@ -25,14 +25,10 @@ struct UserDataView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
                 .onAppear {
-                        ///Task pour exécuter du code asynchrone.
+                        /// pour exécuter du code asynchrone.
                         Task {
                                 await viewModel.fetchUserData()
                         }
                 }
         }
-}
-
-#Preview {
-        UserDataView(viewModel: UserDataViewModel(context: PersistenceController.preview.container.viewContext))
 }

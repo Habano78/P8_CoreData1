@@ -107,9 +107,7 @@
 		225FD5C22E33C3D300F71F1F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				225FD5E82E382E6300F71F1F /* UserRepository.swift */,
-				225FD5EA2E382E9200F71F1F /* SleepRepository.swift */,
-				225FD5EC2E382EAB00F71F1F /* ExerciseRepository.swift */,
+				22CEAB792E4B8D20001CC46E /* Repositories */,
 				225FD5E72E382E1700F71F1F /* CoreData */,
 			);
 			path = Models;
@@ -138,10 +136,19 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		22CEAB792E4B8D20001CC46E /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				225FD5E82E382E6300F71F1F /* UserRepository.swift */,
+				225FD5EA2E382E9200F71F1F /* SleepRepository.swift */,
+				225FD5EC2E382EAB00F71F1F /* ExerciseRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
 		53E587242B235E8F00E4EF99 = {
 			isa = PBXGroup;
 			children = (
-				22CEAB702E4B751F001CC46E /* Protocols */,
 				53E587302B235E8F00E4EF99 /* AristaApp.swift */,
 				22CEAB552E49BF83001CC46E /* Arista.xcdatamodeld */,
 				53E5872F2B235E8F00E4EF99 /* Arista */,
@@ -166,6 +173,7 @@
 				53E587612B235FDC00E4EF99 /* ViewModels */,
 				53E587602B235FD700E4EF99 /* Views */,
 				2218666D2E47239E00C8C87D /* Persistence */,
+				22CEAB702E4B751F001CC46E /* Protocols */,
 				53E587342B235E9000E4EF99 /* Assets.xcassets */,
 				53E587362B235E9000E4EF99 /* Preview Content */,
 			);

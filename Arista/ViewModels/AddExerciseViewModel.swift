@@ -8,37 +8,35 @@
 import Foundation
 import CoreData
 
+@MainActor
 class AddExerciseViewModel: ObservableObject {
         
         //MARK: Properties
         @Published var type: String = "Running"
         @Published var date: Date = Date()
-        @Published var duration: Int = 30
+        @Published var duration: Double = 30.0
         @Published var intensity: Double = 5.0
         
-        // Options pour les menus déroulants(picker)
         let types = ["Running", "Natation", "Football", "Marche", "Cyclisme"]
         
-        private let exerciseRepository: ExerciseRepository
+        private let exerciseRepository: ExerciseRepositoryProtocol
         
-        init(context: NSManagedObjectContext) {
-                self.exerciseRepository = ExerciseRepository(viewContext: context)
+        //MARK: Init
+        init(context: NSManagedObjectContext, service: ExerciseRepositoryProtocol? = nil) {
+                self.exerciseRepository = service ?? ExerciseRepository(viewContext: context)
         }
         
-        //MARK: Methodes
-        /// Appel au repo pour sauvegarder la saisie de l'utilisateur. Si l'ajout réussit, on retourne true.
+        //MARK: Actions
         func addExercise() async -> Bool {
                 do {
-                        // On délègue le travail de création au repository.
                         try await exerciseRepository.addExercise(
-                                category: type,
-                                duration: duration,
-                                intensity: Int(intensity),
-                                startDate: date
+                                category: self.type,
+                                duration: Int(self.duration),
+                                intensity: Int(self.intensity),
+                                startDate: self.date
                         )
                         return true
                 } catch {
-                        // Si une erreur se produit, on l'affiche et on retourne false.
                         print("Failed to add exercise: \(error)")
                         return false
                 }

@@ -4,31 +4,28 @@
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
 //
+
 import Foundation
 import CoreData
 
 @MainActor
 class UserDataViewModel: ObservableObject {
         
+        //MARK: Properties
         @Published var firstName: String = ""
         @Published var lastName: String = ""
         
-        // Le ViewModel dépend maintenant du "contrat" (protocole), pas de l'implémentation concrète.
-        private let userService: UserServiceProtocol
+        private let userRepository: UserRepositoryProtocol
         
-        /// L'initialiseur accepte n'importe quel objet qui respecte le contrat.
-        /// Par défaut, il utilise le vrai UserRepository. Pour les tests, on peut lui injecter un Mock.
-        init(service: UserServiceProtocol = UserRepository()) {
-                self.userService = service
+        //MARK: Init
+        init(service: UserRepositoryProtocol = UserRepository()) {
+                self.userRepository = service
         }
         
-        /// Récupère les données de l'utilisateur de manière asynchrone via le service.
+        //MARK: Action
         func fetchUserData() async {
                 do {
-                        guard let user = try await userService.getUser() else {
-                                print("User not found.")
-                                return
-                        }
+                        guard let user = try await userRepository.getUser() else { return }
                         self.firstName = user.firstName ?? ""
                         self.lastName = user.lastName ?? ""
                 } catch {
@@ -36,4 +33,3 @@ class UserDataViewModel: ObservableObject {
                 }
         }
 }
-
