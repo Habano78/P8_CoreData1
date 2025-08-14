@@ -32,31 +32,22 @@ class ExerciseListViewModel: ObservableObject {
                 }
         }
         
-        func delete(at offsets: IndexSet) async {
-                // Filtrer les index valides pour éviter les crashs
-                let exercisesToDelete: [Exercise] = offsets.compactMap { index in
-                        guard index >= 0 && index < exercises.count else { return nil }
-                        return exercises[index]
-                }
+        func delete(at offsets: IndexSet) {
+                let exercisesToDelete = offsets.map { self.exercises[$0] }
                 
-                guard !exercisesToDelete.isEmpty else { return } // Rien à supprimer
-                
-                // Supprimer localement avec animation
                 withAnimation {
-                        exercises.removeAll { exercisesToDelete.contains($0) }
+                        exercises.remove(atOffsets: offsets)
                 }
                 
-                // Supprimer en base de données
-                for exercise in exercisesToDelete {
-                        do {
-                                try await exerciseRepository.deleteExercise(exercise: exercise)
-                        } catch {
-                                print("Failed to delete exercise: \(error)")
-                                // Récupérer les exercices pour restaurer la liste en cas d'erreur
-                                await fetchExercises()
+                Task {
+                        for exercise in exercisesToDelete {
+                                do {
+                                        try await exerciseRepository.deleteExercise(exercise: exercise)
+                                } catch {
+                                        print("Failed to delete exercise: \(error)")
+                                        await fetchExercises()
+                                }
                         }
                 }
         }
-        
-        
 }

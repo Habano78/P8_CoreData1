@@ -4,78 +4,115 @@
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
 //
+//  Persistence.swift
+//  Arista
+//
+//  Created by Vincent Saluzzo on 08/12/2023.
+//
+
 import CoreData
 import Foundation
 
-// PersistenceController est le chef d'orchestre de CoreData. C'est le point d'entrée unique pour tout ce qui concerne la base de données.
-// Son unique but est de préparer et de configurer toute la pile CoreData pour que le reste de votre application puisse l'utiliser facilement.
-
-
+/// Contrôleur unique pour Core Data, compatible prod, tests et previews.
 struct PersistenceController {
+        
+        // MARK: - Instances partagées
+        
+        /// Instance partagée pour l'app (SQLite par défaut)
         static let shared = PersistenceController()
         
-        static var preview: PersistenceController = {
-                let result = PersistenceController(inMemory: true)
-                let viewContext = result.container.viewContext
-                
-                do {
-                        try viewContext.save()
-                } catch {
-                        let nsError = error as NSError
-                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                }
-                return result
-        }()
+        /// Contexte principal
+        var viewContext: NSManagedObjectContext { container.viewContext }
         
         let container: NSPersistentContainer
         
-        init(inMemory: Bool = false) {
-                container = NSPersistentContainer(name: "Arista")
-                if inMemory {
-                        container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-                }
-                container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-                        if let error = error as NSError? {
-                                fatalError("Unresolved error \(error), \(error.userInfo)")
-                        }
-                })
-                container.viewContext.automaticallyMergesChangesFromParent = true
+        // MARK: - Init
+        
+        /// - Parameters:
+        ///   - inMemory: `true` pour un store éphémère (tests / previews)
+        ///   - bundle: Bundle contenant le modèle Core Data
+        init(inMemory: Bool = false, bundle: Bundle? = nil) {
+                let modelName = "Arista"
+                let bundleToUse = bundle ?? .main
                 
-                // APPELLE de la FONCTION ICI, APRÈS LE CHARGEMENT
-                prepopulateDatabaseIfNeeded()
+                // 1) Charger le modèle depuis le bundle fourni
+                guard let modelURL = bundleToUse.url(forResource: modelName, withExtension: "momd"),
+                      let model = NSManagedObjectModel(contentsOf: modelURL) else {
+                        fatalError("Impossible de charger le modèle Core Data '\(modelName)' depuis \(bundleToUse.bundlePath)")
+                }
+                
+                // 2) Créer le conteneur
+                container = NSPersistentContainer(name: modelName, managedObjectModel: model)
+                
+                // 3) Configurer le store
+                if inMemory {
+                        let description = NSPersistentStoreDescription()
+                        description.type = NSInMemoryStoreType
+                        description.shouldAddStoreAsynchronously = false
+                        container.persistentStoreDescriptions = [description]
+                } else {
+                        let description = container.persistentStoreDescriptions.first ?? NSPersistentStoreDescription()
+                        description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+                        description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+                        container.persistentStoreDescriptions = [description]
+                }
+                
+                // 4) Charger le store
+                container.loadPersistentStores { _, error in
+                        if let error = error as NSError? {
+                                fatalError("Unresolved Core Data error: \(error), \(error.userInfo)")
+                        }
+                }
+                
+                // 5) Configurer le contexte
+                container.viewContext.automaticallyMergesChangesFromParent = true
+                container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+                container.viewContext.undoManager = nil
+                
+                // 6) Prépopulation uniquement en prod
+                if !inMemory {
+                        prepopulateDatabaseIfNeeded()
+                }
         }
         
+        // MARK: - Helpers
+        
+        /// Sauvegarde si nécessaire
+        func saveIfNeeded() {
+                let context = container.viewContext
+                guard context.hasChanges else { return }
+                do { try context.save() } catch {
+                        let nsError = error as NSError
+                        fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+                }
+        }
+        
+        // MARK: - Seed (prod uniquement)
+        
+        /// Remplit la base de données avec des données par défaut au premier lancement
         private func prepopulateDatabaseIfNeeded() {
-                //  1 : Vérifier si l'action a déjà été faite
                 let defaults = UserDefaults.standard
-                let hasLaunchedBefore = defaults.bool(forKey: "hasLaunchedBefore")
+                guard !defaults.bool(forKey: "hasLaunchedBefore") else { return }
                 
-                guard !hasLaunchedBefore else { return }
-                
-                //  2 : Obtenir le contexte
                 let context = container.viewContext
                 
-                //  3 : Créer l'objet User avec les bons attributs
                 let newUser = User(context: context)
                 newUser.lastName = "Perez"
                 newUser.firstName = "Gabriel"
-               
-                //  4 : Créer des enregistrements de sommeil avec les bons attributs
+                
                 let sleepRecord1 = Sleep(context: context)
-                sleepRecord1.startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date()) // Hier
-                sleepRecord1.duration = Int64((360...540).randomElement()!) // Durée en minutes (ex: 6 à 9h)
-                sleepRecord1.quality = Int64((5...10).randomElement()!)   // Qualité sur 10
+                sleepRecord1.startDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+                sleepRecord1.duration = Int64((360...540).randomElement()!)
+                sleepRecord1.quality  = Int64((5...10).randomElement()!)
                 
                 let sleepRecord2 = Sleep(context: context)
-                sleepRecord2.startDate = Calendar.current.date(byAdding: .day, value: -2, to: Date()) // Avant-hier
+                sleepRecord2.startDate = Calendar.current.date(byAdding: .day, value: -2, to: Date())
                 sleepRecord2.duration = Int64((360...540).randomElement()!)
-                sleepRecord2.quality = Int64((5...10).randomElement()!)
+                sleepRecord2.quality  = Int64((5...10).randomElement()!)
                 
-                //  5 : Lier les enregistrements de sommeil à l'utilisateur
                 newUser.addToSleeps(sleepRecord1)
                 newUser.addToSleeps(sleepRecord2)
                 
-                //  6 : Sauvegarder le contexte
                 do {
                         try context.save()
                         defaults.set(true, forKey: "hasLaunchedBefore")
@@ -85,3 +122,7 @@ struct PersistenceController {
                 }
         }
 }
+
+
+/// Classe dummy pour donner un bundle de référence aux tests
+final class TestBundleClass {}

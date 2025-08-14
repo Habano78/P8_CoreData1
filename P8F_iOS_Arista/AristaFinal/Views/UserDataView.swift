@@ -25,7 +25,7 @@ struct UserDataView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
                 .onAppear {
-                        /// Task pour exécuter le code in async.
+                        /// pour exécuter du code asynchrone.
                         Task {
                                 await viewModel.fetchUserData()
                         }

@@ -2,31 +2,41 @@
 //  RepositoryTests.swift
 //  AristaTests
 //
-//  Created by Perez William on 03/08/2025.
+//  Created by Perez William on 14/08/2025.
+//
+
+//
+//  RepositoryTests.swift
+//  AristaTests
+//
+//  Created by Perez William on 14/08/2025.
 //
 
 import Testing
 import CoreData
 @testable import Arista
 
+
+@MainActor
 struct RepositoryTests {
         
-        /// Base de données temporaire en mémoire pour chaque test.
-        func createInMemoryPersistenceController() -> PersistenceController {
-                return PersistenceController(inMemory: true)
+        /// Crée un contexte Core Data en mémoire, isolé pour chaque test
+        func makeTestContext() -> NSManagedObjectContext {
+                // Bundle des tests
+                let testBundle = Bundle(for: TestBundleClass.self)
+                let persistence = PersistenceController(inMemory: true, bundle: testBundle)
+                return persistence.container.viewContext
         }
         
         @Test("Le Repository peut ajouter et récupérer un exercice")
         func testAddAndFetchExercise() async throws {
                 // Arrange
-                let persistenceController = createInMemoryPersistenceController()
-                let context = persistenceController.container.viewContext
+                let context = makeTestContext()
                 let repository = ExerciseRepository(viewContext: context)
                 let category = "Running"
-                let date = Date()
                 
                 // Act
-                try await repository.addExercise(category: category, duration: 30, intensity: 5, startDate: date)
+                try await repository.addExercise(category: category, duration: 30, intensity: 5, startDate: Date())
                 let exercises = try await repository.getExercises()
                 
                 // Assert
@@ -37,12 +47,12 @@ struct RepositoryTests {
         @Test("Le Repository peut supprimer un exercice")
         func testDeleteExercise() async throws {
                 // Arrange
-                let persistenceController = createInMemoryPersistenceController()
-                let context = persistenceController.container.viewContext
+                let context = makeTestContext()
                 let repository = ExerciseRepository(viewContext: context)
                 try await repository.addExercise(category: "Test", duration: 10, intensity: 1, startDate: Date())
+                
                 guard let exerciseToDelete = try await repository.getExercises().first else {
-                        Issue.record("Failed to fetch exercise to delete")
+                        Issue.record("Échec de la récupération de l'exercice à supprimer")
                         return
                 }
                 
@@ -52,5 +62,20 @@ struct RepositoryTests {
                 // Assert
                 let exercisesAfterDelete = try await repository.getExercises()
                 #expect(exercisesAfterDelete.isEmpty)
+        }
+        
+        @Test("Le Repository gère un échec lors de l'ajout")
+        func testAddExerciseFails() async throws {
+                // Arrange
+                let context = makeTestContext()
+                let mockRepo = MockExerciseRepository(shouldFail: true)
+                let viewModel = ExerciseListViewModel(context: context, service: mockRepo)
+                
+                // Act
+                await viewModel.fetchExercises() // simule fetch
+                await viewModel.delete(at: IndexSet(integer: 0)) // simule delete
+                
+                // Assert
+                #expect(mockRepo.addExerciseCallCount == 0) // Rien n'a été ajouté
         }
 }

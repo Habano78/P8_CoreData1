@@ -66,10 +66,9 @@ struct ExerciseListView: View {
                 }
         }
         
+        /// Gère la suppression des exercices
         private func deleteItems(offsets: IndexSet) {
-                Task {
-                        await viewModel.delete(at: offsets)
-                }
+                viewModel.delete(at: offsets)
         }
         
         /// Traduit le nom de la catégorie en un nom d'icône SF Symbols
