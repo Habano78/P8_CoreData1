@@ -20,6 +20,11 @@ struct ViewModelTests {
                 ).viewContext
         }
         
+        func createInMemoryContext() -> NSManagedObjectContext {
+                let persistence = PersistenceController(inMemory: true, bundle: Bundle(for: TestBundleClass.self))
+                return persistence.container.viewContext
+        }
+        
         //MARK: tests UserDataViewModel
         @Test("UserDataViewModel récupère l'utilisateur")
         func testUserDataViewModel_FetchesUser_Succeeds() async {
@@ -45,6 +50,42 @@ struct ViewModelTests {
                 
                 #expect(viewModel.firstName.isEmpty)
                 #expect(viewModel.lastName.isEmpty)
+        }
+        
+        @Test("Le ViewModel gère le cas où aucun utilisateur n'est trouvé")
+        func testUserDataViewModel_UserNotFound() async {
+                // Arrange
+                // On crée un mock qui retourne "nil" (aucun utilisateur)
+                let mockService = MockUserRepository(mockUser: nil)
+                let viewModel = UserDataViewModel(service: mockService)
+                
+                // Act
+                await viewModel.fetchUserData()
+                
+                // Assert
+                // Les propriétés doivent rester vides
+                #expect(viewModel.firstName.isEmpty)
+                #expect(viewModel.lastName.isEmpty)
+        }
+        
+        @Test("Le ViewModel gère un prénom vide (nil)")
+        func testUserDataViewModel_NilFirstName() async {
+                // Arrange
+                let context = createInMemoryContext()
+                let fakeUser = User(context: context)
+                fakeUser.firstName = nil // Le prénom est volontairement nil
+                fakeUser.lastName = "Appleseed"
+                
+                let mockService = MockUserRepository(mockUser: fakeUser)
+                let viewModel = UserDataViewModel(service: mockService)
+                
+                // Act
+                await viewModel.fetchUserData()
+                
+                // Assert
+                // Le prénom doit être une chaîne vide, pas nil
+                #expect(viewModel.firstName == "")
+                #expect(viewModel.lastName == "Appleseed")
         }
         
         // MARK: SleepHistoryViewModel Tests
