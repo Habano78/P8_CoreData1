@@ -10,7 +10,6 @@ struct AddExerciseView: View {
         
         @Environment(\.dismiss) var dismiss
         
-        // Le ViewModel qui contient la logique
         @StateObject var viewModel: AddExerciseViewModel
         
         var body: some View {
@@ -26,7 +25,7 @@ struct AddExerciseView: View {
                                 DatePicker("Date", selection: $viewModel.date)
                                 
                                 /// Stepper pour ajuster la durée
-                                Stepper("Durée : \(viewModel.duration) minutes", value: $viewModel.duration, in: 5...240, step: 5)
+                                Stepper("Durée : \(Int(viewModel.duration)) minutes", value: $viewModel.duration, in: 5...240, step: 5)
                                 
                                 /// Slider pour choisir l'intensité
                                 VStack(alignment: .leading) {

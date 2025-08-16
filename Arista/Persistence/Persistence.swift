@@ -13,38 +13,30 @@
 import CoreData
 import Foundation
 
-/// Contrôleur unique pour Core Data, compatible prod, tests et previews.
 struct PersistenceController {
         
-        // MARK: - Instances partagées
-        
-        /// Instance partagée pour l'app (SQLite par défaut)
+        // MARK: Instances partagées
         static let shared = PersistenceController()
         
         /// Contexte principal
         var viewContext: NSManagedObjectContext { container.viewContext }
-        
         let container: NSPersistentContainer
         
         // MARK: - Init
-        
-        /// - Parameters:
-        ///   - inMemory: `true` pour un store éphémère (tests / previews)
-        ///   - bundle: Bundle contenant le modèle Core Data
         init(inMemory: Bool = false, bundle: Bundle? = nil) {
                 let modelName = "Arista"
                 let bundleToUse = bundle ?? .main
                 
-                // 1) Charger le modèle depuis le bundle fourni
+                // 1Charger le modèle depuis le bundle fourni
                 guard let modelURL = bundleToUse.url(forResource: modelName, withExtension: "momd"),
                       let model = NSManagedObjectModel(contentsOf: modelURL) else {
                         fatalError("Impossible de charger le modèle Core Data '\(modelName)' depuis \(bundleToUse.bundlePath)")
                 }
                 
-                // 2) Créer le conteneur
+                // 2Créer le conteneur
                 container = NSPersistentContainer(name: modelName, managedObjectModel: model)
                 
-                // 3) Configurer le store
+                // 3Configurer le store
                 if inMemory {
                         let description = NSPersistentStoreDescription()
                         description.type = NSInMemoryStoreType
@@ -57,26 +49,25 @@ struct PersistenceController {
                         container.persistentStoreDescriptions = [description]
                 }
                 
-                // 4) Charger le store
+                // 4Charger le store
                 container.loadPersistentStores { _, error in
                         if let error = error as NSError? {
                                 fatalError("Unresolved Core Data error: \(error), \(error.userInfo)")
                         }
                 }
                 
-                // 5) Configurer le contexte
+                // 5Configurer le contexte
                 container.viewContext.automaticallyMergesChangesFromParent = true
                 container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
                 container.viewContext.undoManager = nil
                 
-                // 6) Prépopulation uniquement en prod
+                // 6Prépopulation uniquement en prod
                 if !inMemory {
                         prepopulateDatabaseIfNeeded()
                 }
         }
         
-        /// Exécute une tâche Core Data dans un contexte d'arrière-plan privé et sauvegarde les changements.
-        /// - Parameter block: Le travail à effectuer, recevant le contexte d'arrière-plan.
+        /// POur exécuter une tâche Core Data dans un contexte d'arrière-plan privé et sauvegarde les changements.
         func performBackgroundTask<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
                 // Crée un nouveau contexte privé qui s'exécute sur une file d'attente d'arrière-plan
                 let backgroundContext = container.newBackgroundContext()
@@ -94,9 +85,7 @@ struct PersistenceController {
                 }
         }
         
-        // MARK: - Helpers
-        
-        /// Sauvegarde si nécessaire
+        // MARK: func Helpers
         func saveIfNeeded() {
                 let context = container.viewContext
                 guard context.hasChanges else { return }
@@ -106,8 +95,7 @@ struct PersistenceController {
                 }
         }
         
-        // MARK: - Seed (prod uniquement)
-        
+        // MARK: remplissage
         /// Remplit la base de données avec des données par défaut au premier lancement
         private func prepopulateDatabaseIfNeeded() {
                 let defaults = UserDefaults.standard

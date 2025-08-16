@@ -23,7 +23,7 @@ struct ExerciseRepository: ExerciseRepositoryProtocol {
                 let request: NSFetchRequest<Exercise> = Exercise.fetchRequest()
                 request.sortDescriptors = [NSSortDescriptor(keyPath: \Exercise.startDate, ascending: false)]
                 return try await viewContext.perform {
-                        try self.viewContext.fetch(request)
+                        try viewContext.fetch(request)
                 }
         }
         
