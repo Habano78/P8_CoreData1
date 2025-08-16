@@ -28,17 +28,11 @@
 		22336C842E4E190500420596 /* SleepRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C822E4E190500420596 /* SleepRepository.swift */; };
 		22336C852E4E190500420596 /* ExerciseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C832E4E190500420596 /* ExerciseRepository.swift */; };
 		22336C862E4E190500420596 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C812E4E190500420596 /* UserRepository.swift */; };
+		22EF739D2E50878C00389051 /* AristaFinalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EF739A2E50878C00389051 /* AristaFinalApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		22336C462E4E13B300420596 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22336C2B2E4E13B100420596 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 22336C322E4E13B100420596;
-			remoteInfo = AristaFinal;
-		};
-		22336C502E4E13B300420596 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 22336C2B2E4E13B100420596 /* Project object */;
 			proxyType = 1;
@@ -56,7 +50,6 @@
 		222EB10A2E4E1EF7001FD857 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		22336C332E4E13B100420596 /* AristaFinal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AristaFinal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22336C452E4E13B300420596 /* AristaFinalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AristaFinalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		22336C4F2E4E13B300420596 /* AristaFinalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AristaFinalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22336C742E4E18A400420596 /* UserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryProtocol.swift; sourceTree = "<group>"; };
 		22336C752E4E18A400420596 /* SleepRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRepositoryProtocol.swift; sourceTree = "<group>"; };
 		22336C762E4E18A400420596 /* ExerciseRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepositoryProtocol.swift; sourceTree = "<group>"; };
@@ -72,6 +65,7 @@
 		22336C812E4E190500420596 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		22336C822E4E190500420596 /* SleepRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepRepository.swift; sourceTree = "<group>"; };
 		22336C832E4E190500420596 /* ExerciseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRepository.swift; sourceTree = "<group>"; };
+		22EF739A2E50878C00389051 /* AristaFinalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AristaFinalApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -83,11 +77,6 @@
 		22336C482E4E13B300420596 /* AristaFinalTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AristaFinalTests;
-			sourceTree = "<group>";
-		};
-		22336C522E4E13B300420596 /* AristaFinalUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AristaFinalUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -107,19 +96,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22336C4C2E4E13B300420596 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		22336C2A2E4E13B100420596 = {
 			isa = PBXGroup;
 			children = (
+				22EF739A2E50878C00389051 /* AristaFinalApp.swift */,
 				22336C6E2E4E178400420596 /* Model */,
 				22336C6F2E4E17FB00420596 /* ViewModels */,
 				22336C702E4E180600420596 /* Views */,
@@ -127,7 +110,6 @@
 				22336C712E4E182000420596 /* Persistence */,
 				22336C352E4E13B100420596 /* AristaFinal */,
 				22336C482E4E13B300420596 /* AristaFinalTests */,
-				22336C522E4E13B300420596 /* AristaFinalUITests */,
 				22336C342E4E13B100420596 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -137,7 +119,6 @@
 			children = (
 				22336C332E4E13B100420596 /* AristaFinal.app */,
 				22336C452E4E13B300420596 /* AristaFinalTests.xctest */,
-				22336C4F2E4E13B300420596 /* AristaFinalUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,8 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				22336C772E4E18B700420596 /* UserDataView.swift */,
-				22336C782E4E18B700420596 /* ExerciseListView.swift */,
 				22336C792E4E18B700420596 /* SleepHistoryView.swift */,
+				22336C782E4E18B700420596 /* ExerciseListView.swift */,
 				22336C7A2E4E18B700420596 /* AddExerciseView.swift */,
 			);
 			path = Views;
@@ -262,29 +243,6 @@
 			productReference = 22336C452E4E13B300420596 /* AristaFinalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		22336C4E2E4E13B300420596 /* AristaFinalUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 22336C5F2E4E13B300420596 /* Build configuration list for PBXNativeTarget "AristaFinalUITests" */;
-			buildPhases = (
-				22336C4B2E4E13B300420596 /* Sources */,
-				22336C4C2E4E13B300420596 /* Frameworks */,
-				22336C4D2E4E13B300420596 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				22336C512E4E13B300420596 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				22336C522E4E13B300420596 /* AristaFinalUITests */,
-			);
-			name = AristaFinalUITests;
-			packageProductDependencies = (
-			);
-			productName = AristaFinalUITests;
-			productReference = 22336C4F2E4E13B300420596 /* AristaFinalUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -301,10 +259,6 @@
 					22336C442E4E13B300420596 = {
 						CreatedOnToolsVersion = 16.4;
 						LastSwiftMigration = 1640;
-						TestTargetID = 22336C322E4E13B100420596;
-					};
-					22336C4E2E4E13B300420596 = {
-						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 22336C322E4E13B100420596;
 					};
 				};
@@ -325,7 +279,6 @@
 			targets = (
 				22336C322E4E13B100420596 /* AristaFinal */,
 				22336C442E4E13B300420596 /* AristaFinalTests */,
-				22336C4E2E4E13B300420596 /* AristaFinalUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -339,13 +292,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		22336C432E4E13B300420596 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		22336C4D2E4E13B300420596 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -367,6 +313,7 @@
 				222EB0FB2E4E1BB8001FD857 /* AddExerciseView.swift in Sources */,
 				222EB0FC2E4E1BB8001FD857 /* SleepHistoryView.swift in Sources */,
 				222EB0F92E4E1BB1001FD857 /* UserDataView.swift in Sources */,
+				22EF739D2E50878C00389051 /* AristaFinalApp.swift in Sources */,
 				222EB1022E4E1BFE001FD857 /* SleepHistoryViewModel.swift in Sources */,
 				222EB10B2E4E1EF7001FD857 /* User+CoreDataClass.swift in Sources */,
 				222EB10C2E4E1EF7001FD857 /* Exercise+CoreDataProperties.swift in Sources */,
@@ -390,13 +337,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22336C4B2E4E13B300420596 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -404,11 +344,6 @@
 			isa = PBXTargetDependency;
 			target = 22336C322E4E13B100420596 /* AristaFinal */;
 			targetProxy = 22336C462E4E13B300420596 /* PBXContainerItemProxy */;
-		};
-		22336C512E4E13B300420596 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 22336C322E4E13B100420596 /* AristaFinal */;
-			targetProxy = 22336C502E4E13B300420596 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -625,38 +560,6 @@
 			};
 			name = Release;
 		};
-		22336C602E4E13B300420596 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gaby.AristaFinalUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AristaFinal;
-			};
-			name = Debug;
-		};
-		22336C612E4E13B300420596 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gaby.AristaFinalUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AristaFinal;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -683,15 +586,6 @@
 			buildConfigurations = (
 				22336C5D2E4E13B300420596 /* Debug */,
 				22336C5E2E4E13B300420596 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		22336C5F2E4E13B300420596 /* Build configuration list for PBXNativeTarget "AristaFinalUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				22336C602E4E13B300420596 /* Debug */,
-				22336C612E4E13B300420596 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

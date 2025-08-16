@@ -4,7 +4,6 @@
 //
 //  Created by Vincent Saluzzo on 08/12/2023.
 //
-
 import SwiftUI
 
 struct AddExerciseView: View {
@@ -12,7 +11,7 @@ struct AddExerciseView: View {
         @Environment(\.dismiss) var dismiss
         
         // Le ViewModel qui contient la logique
-        @ObservedObject var viewModel: AddExerciseViewModel
+        @StateObject var viewModel: AddExerciseViewModel
         
         var body: some View {
                 NavigationStack {

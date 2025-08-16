@@ -1,5 +1,5 @@
 //
-//  ViewModelsTests.swift
+//  UserDataViewModelTests.swift
 //  AristaTests
 //
 //  Created by Perez William on 03/08/2025.
@@ -7,7 +7,7 @@
 
 import Testing
 import CoreData
-@testable import AristaFinal
+@testable import Arista
 
 @MainActor
 struct UserDataViewModelTests {
@@ -39,7 +39,7 @@ struct UserDataViewModelTests {
         @Test("Le ViewModel gère une erreur venant du Mock")
         func testUserDataViewModel_FetchesUser_Fails() async {
                 // Arrange
-                var mockService = MockUserRepository()
+                let mockService = MockUserRepository()
                 mockService.shouldFail = true
                 
                 let viewModel = UserDataViewModel(service: mockService)

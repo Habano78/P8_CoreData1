@@ -1,33 +1,26 @@
-//
-//  AristaApp.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 @main
 struct AristaApp: App {
         let persistenceController = PersistenceController.shared
         
-        //MARK: Dépendances
+        // On prépare nos dépendances ici
         let exerciseRepository: ExerciseRepositoryProtocol
         let userRepository: UserRepositoryProtocol
         let sleepRepository: SleepRepositoryProtocol
         
-        //MARK: Instantiation
         init() {
+                // On instancie le controller et les repositories une seule fois
                 let persistence = PersistenceController.shared
                 self.exerciseRepository = ExerciseRepository(persistenceController: persistence)
                 self.userRepository = UserRepository(persistenceController: persistence)
                 self.sleepRepository = SleepRepository(persistenceController: persistence)
         }
         
-        //MARK: Body
         var body: some Scene {
                 WindowGroup {
                         TabView {
+                                // On injecte les repositories dans les ViewModels
                                 UserDataView(viewModel: UserDataViewModel(service: userRepository))
                                         .tabItem { Label("Utilisateur", systemImage: "person") }
                                 
@@ -37,7 +30,7 @@ struct AristaApp: App {
                                 SleepHistoryView(viewModel: SleepHistoryViewModel(service: sleepRepository))
                                         .tabItem { Label("Sommeil", systemImage: "moon") }
                         }
-                        ///pour rendre disponible la connexion des views à la base de données 
+                        // L'environnement reste utile pour les @FetchRequest ou les previews
                         .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 }
         }

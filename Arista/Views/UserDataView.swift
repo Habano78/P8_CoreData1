@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserDataView: View {
+        
         @ObservedObject var viewModel: UserDataViewModel
         
         var body: some View {
@@ -25,7 +26,6 @@ struct UserDataView: View {
                 }
                 .edgesIgnoringSafeArea(.all)
                 .onAppear {
-                        /// Task pour exécuter le code in async.
                         Task {
                                 await viewModel.fetchUserData()
                         }

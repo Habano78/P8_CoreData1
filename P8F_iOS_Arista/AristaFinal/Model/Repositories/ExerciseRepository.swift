@@ -1,20 +1,14 @@
-//
-//  ExerciseRepository.swift
-//  Arista
-//
-//  Created by Perez William on 29/07/2025.
-//
 import Foundation
 import CoreData
 import SwiftUI
 
-//MARK: Contrat
 struct ExerciseRepository: ExerciseRepositoryProtocol {
         
-        let viewContext: NSManagedObjectContext
+        private let persistenceController: PersistenceController
+        private var viewContext: NSManagedObjectContext { persistenceController.viewContext }
         
-        init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-                self.viewContext = viewContext
+        init(persistenceController: PersistenceController = .shared) {
+                self.persistenceController = persistenceController
         }
         
         /// Récupère tous les exercices
@@ -26,28 +20,23 @@ struct ExerciseRepository: ExerciseRepositoryProtocol {
                 }
         }
         
-        /// Ajoute un exercice de manière asynchrone.
+        /// Ajoute un exercice sur un thread d'arrière-plan.
         func addExercise(category: String, duration: Int, intensity: Int, startDate: Date) async throws {
-                
-                try await viewContext.perform { /// la modification et la sauvegarde se font toutes sur le bon thread, en toute sécurité.
-                        let newExercise = Exercise(context: self.viewContext)
+                try await persistenceController.performBackgroundTask { context in
+                        let newExercise = Exercise(context: context)
                         newExercise.category = category
                         newExercise.duration = Int64(duration)
                         newExercise.intensity = Int64(intensity)
                         newExercise.startDate = startDate
-                        
-                        // La sauvegarde se fait dans le même bloc sécurisé
-                        try self.viewContext.save()
                 }
         }
         
-        /// Supprime un exercice de manière asynchrone.
+        /// Supprime un exercice sur un thread d'arrière-plan.
         func deleteExercise(exercise: Exercise) async throws {
-                await viewContext.perform {
-                        self.viewContext.delete(exercise)
-                }
-                try await viewContext.perform {
-                        try self.viewContext.save()
+                try await persistenceController.performBackgroundTask { context in
+                        if let exerciseToDelete = context.object(with: exercise.objectID) as? Exercise {
+                                context.delete(exerciseToDelete)
+                        }
                 }
         }
 }

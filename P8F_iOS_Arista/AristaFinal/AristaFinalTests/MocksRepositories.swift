@@ -36,26 +36,28 @@ struct MockSleepRepository: SleepRepositoryProtocol {
 
 // MARK: - Mock pour ExerciseRepository
 class MockExerciseRepository: ExerciseRepositoryProtocol {
-        
-        var shouldFail = false
-        var addExerciseCallCount = 0
-        var deleteExerciseCallCount = 0
-        
-        var exercises: [Exercise] = [] /// pour stocker les exercices factices
-        
-        
-        func getExercises() async throws -> [Exercise] {
-                if shouldFail { throw DummyError.testError }
-                return exercises // Retourne la propriété "exercises" que le test a préparée
-        }
-        
-        func addExercise(category: String, duration: Int, intensity: Int, startDate: Date) async throws {
-                if shouldFail { throw DummyError.testError }
-                addExerciseCallCount += 1
-        }
-        
-        func deleteExercise(exercise: Exercise) async throws {
-                if shouldFail { throw DummyError.testError }
-                deleteExerciseCallCount += 1
-        }
+    
+    // Des flags plus spécifiques selon la func
+    var shouldFailGetExercises = false
+    var shouldFailAddExercise = false
+    var shouldFailDeleteExercise = false
+    
+    var addExerciseCallCount = 0
+    var deleteExerciseCallCount = 0
+    var exercises: [Exercise] = []
+    
+    func getExercises() async throws -> [Exercise] {
+        if shouldFailGetExercises { throw DummyError.testError }
+        return exercises
+    }
+    
+    func addExercise(category: String, duration: Int, intensity: Int, startDate: Date) async throws {
+        if shouldFailAddExercise { throw DummyError.testError }
+        addExerciseCallCount += 1
+    }
+    
+    func deleteExercise(exercise: Exercise) async throws {
+        if shouldFailDeleteExercise { throw DummyError.testError }
+        deleteExerciseCallCount += 1
+    }
 }

@@ -9,54 +9,46 @@ import CoreData
 import SwiftUI
 
 @MainActor
-class ExerciseListViewModel: ObservableObject {
+final class ExerciseListViewModel: ObservableObject {
         
         //MARK: Properties
         @Published var exercises = [Exercise]()
-        var viewContext: NSManagedObjectContext
         private let exerciseRepository: ExerciseRepositoryProtocol
         
         //MARK: Init
-        init(context: NSManagedObjectContext, service: ExerciseRepositoryProtocol? = nil) {
-                self.viewContext = context
-                self.exerciseRepository = service ?? ExerciseRepository(viewContext: context)
+        init(service: ExerciseRepositoryProtocol)
+        {
+                self.exerciseRepository = service
         }
         
         //MARK: Actions
-        
         func fetchExercises() async {
                 do {
-                        self.exercises = try await exerciseRepository.getExercises()
+                        exercises = try await exerciseRepository.getExercises()
                 } catch {
                         print("Failed to fetch exercises: \(error)")
                 }
         }
         
         func delete(at offsets: IndexSet) async {
-                // Filtrer les index valides pour éviter les crashs
                 let exercisesToDelete: [Exercise] = offsets.compactMap { index in
                         guard index >= 0 && index < exercises.count else { return nil }
                         return exercises[index]
                 }
                 
-                guard !exercisesToDelete.isEmpty else { return } // Rien à supprimer
+                guard !exercisesToDelete.isEmpty else { return }
                 
-                // Supprimer localement avec animation
                 withAnimation {
                         exercises.removeAll { exercisesToDelete.contains($0) }
                 }
                 
-                // Supprimer en base de données
                 for exercise in exercisesToDelete {
                         do {
                                 try await exerciseRepository.deleteExercise(exercise: exercise)
                         } catch {
                                 print("Failed to delete exercise: \(error)")
-                                // Récupérer les exercices pour restaurer la liste en cas d'erreur
                                 await fetchExercises()
                         }
                 }
         }
-        
-        
 }

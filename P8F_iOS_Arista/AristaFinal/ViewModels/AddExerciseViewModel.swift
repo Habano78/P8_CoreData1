@@ -1,17 +1,9 @@
-//
-//  AddExerciseViewModel.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import Foundation
 import CoreData
 
 @MainActor
 class AddExerciseViewModel: ObservableObject {
         
-        //MARK: Properties
         @Published var type: String = "Running"
         @Published var date: Date = Date()
         @Published var duration: Double = 30.0
@@ -21,12 +13,11 @@ class AddExerciseViewModel: ObservableObject {
         
         private let exerciseRepository: ExerciseRepositoryProtocol
         
-        //MARK: Init
-        init(context: NSManagedObjectContext, service: ExerciseRepositoryProtocol? = nil) {
-                self.exerciseRepository = service ?? ExerciseRepository(viewContext: context)
+        init(service: ExerciseRepositoryProtocol)
+        {
+                self.exerciseRepository = service
         }
         
-        //MARK: Actions
         func addExercise() async -> Bool {
                 do {
                         try await exerciseRepository.addExercise(

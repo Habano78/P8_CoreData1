@@ -7,16 +7,16 @@
 import Foundation
 import CoreData
 
-//MARK: Contrat
 struct SleepRepository: SleepRepositoryProtocol {
         
-        let viewContext: NSManagedObjectContext
+        private let persistenceController: PersistenceController
+        private var viewContext: NSManagedObjectContext { persistenceController.viewContext }
         
-        init(viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-                self.viewContext = viewContext
+        init(persistenceController: PersistenceController = .shared)
+        {
+                self.persistenceController = persistenceController
         }
         
-        //MARK: Methode (récupère in async toutes les sessions de sommeil)
         func getSleepSessions() async throws -> [Sleep] {
                 let request: NSFetchRequest<Sleep> = Sleep.fetchRequest()
                 request.sortDescriptors = [NSSortDescriptor(keyPath: \Sleep.startDate, ascending: false)]
@@ -26,3 +26,4 @@ struct SleepRepository: SleepRepositoryProtocol {
                 }
         }
 }
+

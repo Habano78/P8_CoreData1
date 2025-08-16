@@ -8,6 +8,5 @@
 import Foundation
 
 protocol UserRepositoryProtocol {
-    /// Récupère l'unique utilisateur de la base de données.
     func getUser() async throws -> User?
 }

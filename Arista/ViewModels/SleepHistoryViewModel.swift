@@ -6,24 +6,24 @@
 //
 import Foundation
 import CoreData
-import SwiftUI
 
 @MainActor
-class SleepHistoryViewModel: ObservableObject {
+final class SleepHistoryViewModel: ObservableObject {
         
         //MARK: Properties
         @Published var sleepSessions = [Sleep]()
         private let sleepRepository: SleepRepositoryProtocol
         
         //MARK: Init
-        init(service: SleepRepositoryProtocol = SleepRepository()) {
+        init(service: SleepRepositoryProtocol)
+        {
                 self.sleepRepository = service
         }
         
         //MARK: Action
         func fetchSleepSessions() async {
                 do {
-                        self.sleepSessions = try await sleepRepository.getSleepSessions()
+                        sleepSessions = try await sleepRepository.getSleepSessions()
                 } catch {
                         print("Failed to fetch sleep sessions: \(error)")
                 }

@@ -75,6 +75,25 @@ struct PersistenceController {
                 }
         }
         
+        /// Exécute une tâche Core Data dans un contexte d'arrière-plan privé et sauvegarde les changements.
+        /// - Parameter block: Le travail à effectuer, recevant le contexte d'arrière-plan.
+        func performBackgroundTask<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
+                // Crée un nouveau contexte privé qui s'exécute sur une file d'attente d'arrière-plan
+                let backgroundContext = container.newBackgroundContext()
+                
+                // Exécute le code sur la file d'attente du contexte
+                return try await backgroundContext.perform {
+                        let result = try block(backgroundContext)
+                        
+                        // Sauvegarde le contexte d'arrière-plan s'il y a eu des changements
+                        if backgroundContext.hasChanges {
+                                try backgroundContext.save()
+                        }
+                        
+                        return result
+                }
+        }
+        
         // MARK: - Helpers
         
         /// Sauvegarde si nécessaire
@@ -122,7 +141,3 @@ struct PersistenceController {
                 }
         }
 }
-
-
-/// Classe dummy pour donner un bundle de référence aux tests
-final class TestBundleClass {}

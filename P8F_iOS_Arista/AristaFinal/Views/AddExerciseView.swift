@@ -12,7 +12,7 @@ struct AddExerciseView: View {
         @Environment(\.dismiss) var dismiss
         
         // Le ViewModel qui contient la logique
-        @ObservedObject var viewModel: AddExerciseViewModel
+        @StateObject var viewModel: AddExerciseViewModel
         
         var body: some View {
                 NavigationStack {

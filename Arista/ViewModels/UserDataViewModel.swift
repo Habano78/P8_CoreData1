@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 @MainActor
-class UserDataViewModel: ObservableObject {
+final class UserDataViewModel: ObservableObject {
         
         //MARK: Properties
         @Published var firstName: String = ""
@@ -18,7 +18,8 @@ class UserDataViewModel: ObservableObject {
         private let userRepository: UserRepositoryProtocol
         
         //MARK: Init
-        init(service: UserRepositoryProtocol = UserRepository()) {
+        init(service: UserRepositoryProtocol)
+        {
                 self.userRepository = service
         }
         
@@ -26,8 +27,8 @@ class UserDataViewModel: ObservableObject {
         func fetchUserData() async {
                 do {
                         guard let user = try await userRepository.getUser() else { return }
-                        self.firstName = user.firstName ?? ""
-                        self.lastName = user.lastName ?? ""
+                        firstName = user.firstName ?? ""
+                        lastName = user.lastName ?? ""
                 } catch {
                         print("Failed to fetch user: \(error)")
                 }

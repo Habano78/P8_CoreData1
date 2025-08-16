@@ -1,28 +1,20 @@
-//
-//  ExerciseListView.swift
-//  Arista
-//
-//  Created by Vincent Saluzzo on 08/12/2023.
-//
-
 import SwiftUI
 
 struct ExerciseListView: View {
-        // Le ViewModel contient la logique et les données à afficher
+        // Le ViewModel est maintenant injecté, donc @ObservedObject est correct
         @ObservedObject var viewModel: ExerciseListViewModel
+        
         // Une variable d'état pour contrôler l'affichage de la feuille d'ajout
         @State private var showingAddExerciseView = false
         
         var body: some View {
                 NavigationStack {
                         List {
-                                /// La boucle itère sur les vrais objets "Exercise" de CoreData
                                 ForEach(viewModel.exercises) { exercise in
                                         HStack {
                                                 Image(systemName: iconForCategory(exercise.category))
                                                 
                                                 VStack(alignment: .leading) {
-                                                        
                                                         Text(exercise.category ?? "N/A")
                                                                 .font(.headline)
                                                         Text("Durée: \(exercise.duration) min")
@@ -35,29 +27,31 @@ struct ExerciseListView: View {
                                                 IntensityIndicator(intensity: Int(exercise.intensity))
                                         }
                                 }
-                                /// Ajoute la fonctionnalité "glisserr pour supprimer"
                                 .onDelete(perform: deleteItems)
                         }
                         .navigationTitle("Exercices")
-                        /// Barre de navigation avec un bouton "+" pour ajouter un exercice
                         .navigationBarItems(trailing: Button(action: {
                                 showingAddExerciseView = true
                         }) {
                                 Image(systemName: "plus")
                         })
-                        ///feuille qui apparaît pour ajouter un exercice
+                        // CORRIGÉ : C'est ici que se trouvaient les erreurs.
+                        // On crée le AddExerciseViewModel en lui passant un nouveau repository.
                         .sheet(isPresented: $showingAddExerciseView) {
-                                AddExerciseView(viewModel: AddExerciseViewModel(context: viewModel.viewContext))
+                                AddExerciseView(
+                                        viewModel: AddExerciseViewModel(service: ExerciseRepository())
+                                )
                         }
-                        /// Charge les données quand la vue apparaît
+                        // On s'assure que l'appel async est dans un Task
                         .onAppear {
                                 Task {
                                         await viewModel.fetchExercises()
                                 }
                         }
-                        /// Rafraîchit la liste quand la vue revient au premier plan
-                        .onChange(of: showingAddExerciseView) {
-                                if !showingAddExerciseView {
+                        // Optionnel : un .onChange pour rafraîchir la liste après un ajout.
+                        .onChange(of: showingAddExerciseView) { oldState, newState in
+                                // Si la vue n'est plus présentée (on vient de la fermer)
+                                if !newState {
                                         Task {
                                                 await viewModel.fetchExercises()
                                         }
@@ -66,12 +60,13 @@ struct ExerciseListView: View {
                 }
         }
         
-        /// Gère la suppression des exercices
         private func deleteItems(offsets: IndexSet) {
-                viewModel.delete(at: offsets)
+                // On s'assure que l'appel async est dans un Task
+                Task {
+                        await viewModel.delete(at: offsets)
+                }
         }
         
-        /// Traduit le nom de la catégorie en un nom d'icône SF Symbols
         private func iconForCategory(_ category: String?) -> String {
                 switch category {
                 case "Football":
@@ -90,9 +85,8 @@ struct ExerciseListView: View {
         }
 }
 
-// MARK: - Vues auxiliaires
+// MARK: - Vue auxiliaire
 
-/// Un simple cercle de couleur pour représenter l'intensité
 struct IntensityIndicator: View {
         var intensity: Int
         

@@ -1,34 +1,24 @@
-//
-//  RepositoryTests.swift
-//  AristaTests
-//
-//  Created by Perez William on 03/08/2025.
-//
 import Testing
 import CoreData
 @testable import AristaFinal
 
 struct RepositoryTests {
         
-        // MARK: - Properties
-        
-        // Ces variables seront réinitialisées pour chaque test.
+        // MARK: Properties
         var persistenceController: PersistenceController
-        var viewContext: NSManagedObjectContext
         var repository: ExerciseRepository
         
-        // MARK: - Setup
+        // MARK: Setup
         
-        // L'initialiseur de la struct est appelé avant chaque exécution de @Test
         init() {
-                // On crée une base de données fraîche et en mémoire
                 let persistenceController = PersistenceController(inMemory: true)
                 self.persistenceController = persistenceController
-                self.viewContext = persistenceController.container.viewContext
-                self.repository = ExerciseRepository(viewContext: self.viewContext)
+                
+                // CORRIGÉ : On initialise le repository avec le controller, pas le contexte.
+                self.repository = ExerciseRepository(persistenceController: self.persistenceController)
         }
         
-        // MARK: - Tests
+        // MARK: Tests
         
         @Test("Le Repository peut ajouter et récupérer un exercice")
         func testAddAndFetchExercise() async throws {

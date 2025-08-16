@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 @MainActor
-class AddExerciseViewModel: ObservableObject {
+final class AddExerciseViewModel: ObservableObject {
         
         //MARK: Properties
         @Published var type: String = "Running"
@@ -22,18 +22,19 @@ class AddExerciseViewModel: ObservableObject {
         private let exerciseRepository: ExerciseRepositoryProtocol
         
         //MARK: Init
-        init(context: NSManagedObjectContext, service: ExerciseRepositoryProtocol? = nil) {
-                self.exerciseRepository = service ?? ExerciseRepository(viewContext: context)
+        init(service: ExerciseRepositoryProtocol)
+        {
+                self.exerciseRepository = service
         }
         
-        //MARK: Actions
+        //MARK: Action
         func addExercise() async -> Bool {
                 do {
                         try await exerciseRepository.addExercise(
-                                category: self.type,
-                                duration: Int(self.duration),
-                                intensity: Int(self.intensity),
-                                startDate: self.date
+                                category: type,
+                                duration: Int(duration),
+                                intensity: Int(intensity),
+                                startDate: date
                         )
                         return true
                 } catch {
