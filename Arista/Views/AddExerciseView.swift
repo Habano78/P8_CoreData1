@@ -14,7 +14,6 @@ struct AddExerciseView: View {
         
         var body: some View {
                 NavigationStack {
-                        /// Un formulaire pour une présentation propre
                         Form {
                                 Picker("Catégorie", selection: $viewModel.type) {
                                         ForEach(viewModel.types, id: \.self) { type in
