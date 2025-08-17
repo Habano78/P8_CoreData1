@@ -15,7 +15,6 @@ struct SleepHistoryView: View {
                 NavigationStack {
                         List(viewModel.sleepSessions) { session in
                                 HStack {
-                                        /// Affiche l'indicateur de qualité du sommeil.
                                         QualityIndicator(quality: Int(session.quality))
                                                 .padding()
                                         

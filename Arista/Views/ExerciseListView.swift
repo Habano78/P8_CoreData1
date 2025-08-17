@@ -48,15 +48,12 @@ struct ExerciseListView: View {
                                         viewModel: AddExerciseViewModel(service: ExerciseRepository())
                                 )
                         }
-                        // On s'assure que l'appel async est dans un Task
                         .onAppear {
                                 Task {
                                         await viewModel.fetchExercises()
                                 }
                         }
-                        // Optionnel : un .onChange pour rafraîchir la liste après un ajout.
                         .onChange(of: showingAddExerciseView) { oldState, newState in
-                                // Si la vue n'est plus présentée (on vient de la fermer)
                                 if !newState {
                                         Task {
                                                 await viewModel.fetchExercises()
@@ -67,7 +64,6 @@ struct ExerciseListView: View {
         }
         
         private func deleteItems(offsets: IndexSet) {
-                // On s'assure que l'appel async est dans un Task
                 Task {
                         await viewModel.delete(at: offsets)
                 }

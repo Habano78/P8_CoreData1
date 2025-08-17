@@ -15,12 +15,12 @@ import Foundation
 
 struct PersistenceController {
         
-        // MARK: Instances partagées
-        static let shared = PersistenceController()
+        // MARK: Instances
+        static let shared = PersistenceController() ///singleton
         
-        /// Contexte principal
-        var viewContext: NSManagedObjectContext { container.viewContext }
         let container: NSPersistentContainer
+        var viewContext: NSManagedObjectContext { container.viewContext }
+       
         
         // MARK: - Init
         init(inMemory: Bool = false, bundle: Bundle? = nil) {
@@ -33,16 +33,16 @@ struct PersistenceController {
                         fatalError("Impossible de charger le modèle Core Data '\(modelName)' depuis \(bundleToUse.bundlePath)")
                 }
                 
-                // 2Créer le conteneur
+                // 2Création du conteneur CoreData
                 container = NSPersistentContainer(name: modelName, managedObjectModel: model)
                 
                 // 3Configurer le store
-                if inMemory {
+                if inMemory { ///pour les test
                         let description = NSPersistentStoreDescription()
                         description.type = NSInMemoryStoreType
                         description.shouldAddStoreAsynchronously = false
                         container.persistentStoreDescriptions = [description]
-                } else {
+                } else { ///pour la prod
                         let description = container.persistentStoreDescriptions.first ?? NSPersistentStoreDescription()
                         description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
                         description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
@@ -67,18 +67,16 @@ struct PersistenceController {
                 }
         }
         
-        /// POur exécuter une tâche Core Data dans un contexte d'arrière-plan privé et sauvegarde les changements.
         func performBackgroundTask<T>(_ block: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
-                // Crée un nouveau contexte privé qui s'exécute sur une file d'attente d'arrière-plan
+                /// Crée un contexte qui vit sur un thread d'arrière-plan
                 let backgroundContext = container.newBackgroundContext()
-                
-                // Exécute le code sur la file d'attente du contexte
+                /// Exécute le code sur la file d'attente du contexte
                 return try await backgroundContext.perform {
+                        /// Le travail (création, suppression) se fait ici
                         let result = try block(backgroundContext)
                         
-                        // Sauvegarde le contexte d'arrière-plan s'il y a eu des changements
                         if backgroundContext.hasChanges {
-                                try backgroundContext.save()
+                                try backgroundContext.save() /// le signal est envoyé ici !
                         }
                         
                         return result

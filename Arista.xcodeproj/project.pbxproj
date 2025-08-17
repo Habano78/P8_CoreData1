@@ -175,12 +175,11 @@
 		53E5872F2B235E8F00E4EF99 /* Arista */ = {
 			isa = PBXGroup;
 			children = (
-				22CEAB702E4B751F001CC46E /* Protocols */,
-				225FD5C22E33C3D300F71F1F /* Models */,
-				53E587612B235FDC00E4EF99 /* ViewModels */,
 				53E587602B235FD700E4EF99 /* Views */,
+				53E587612B235FDC00E4EF99 /* ViewModels */,
+				225FD5C22E33C3D300F71F1F /* Models */,
+				22CEAB702E4B751F001CC46E /* Protocols */,
 				2218666D2E47239E00C8C87D /* Persistence */,
-				53E587342B235E9000E4EF99 /* Assets.xcassets */,
 				53E587362B235E9000E4EF99 /* Preview Content */,
 			);
 			path = Arista;
@@ -190,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				53E587372B235E9000E4EF99 /* Preview Assets.xcassets */,
+				53E587342B235E9000E4EF99 /* Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
